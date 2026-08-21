@@ -1,0 +1,1938 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<meta name="description" content="Claude를 처음 쓰는 분을 위한 안내서 — Chat·Cowork·Code 구분, 용어, 잘 쓰는 법, 단축키, 교육 자료.">
+<title>클로드 뽕 뽑기</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Ctext%20y%3D%27.9em%27%20font-size%3D%2790%27%3E%F0%9F%93%97%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+</head>
+<body>
+<style>
+:root{
+  --ground:#F1F2F0; --surface:#FBFCFB; --surface-2:#E7EAE6;
+  --ink:#151916; --ink-2:#4C544D; --ink-3:#79817A;
+  --rule:#D1D6D0; --rule-2:#E2E6E1;
+  --accent:#1F5A3D; --accent-ink:#194A32; --accent-soft:#DCE9E1;
+  --warn:#8A5A08; --warn-soft:#F5E9D3; --warn-rule:#DFC896;
+  --cap-bg:#FFFFFF; --cap-rule:#C3C9C2; --cap-sh:#ADB5AC;
+  --sans:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --disp:"Bricolage Grotesque","Noto Sans KR",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#101310; --surface:#181C19; --surface-2:#1F2420;
+    --ink:#E6EBE7; --ink-2:#9AA39C; --ink-3:#6B736C;
+    --rule:#282E29; --rule-2:#1F2521;
+    --accent:#63C594; --accent-ink:#8AD9B0; --accent-soft:#0F2A1D;
+    --warn:#D9A055; --warn-soft:#2C2210; --warn-rule:#4A3A18;
+    --cap-bg:#222824; --cap-rule:#3A423C; --cap-sh:#0A0D0B;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#101310; --surface:#181C19; --surface-2:#1F2420;
+  --ink:#E6EBE7; --ink-2:#9AA39C; --ink-3:#6B736C;
+  --rule:#282E29; --rule-2:#1F2521;
+  --accent:#63C594; --accent-ink:#8AD9B0; --accent-soft:#0F2A1D;
+  --warn:#D9A055; --warn-soft:#2C2210; --warn-rule:#4A3A18;
+  --cap-bg:#222824; --cap-rule:#3A423C; --cap-sh:#0A0D0B;
+}
+
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.68; -webkit-font-smoothing:antialiased}
+.wrap{max-width:1000px; margin:0 auto; padding:0 24px 88px}
+
+/* ---- masthead ---- */
+.mast{padding:52px 0 0}
+.mast-eye{font-family:var(--disp); font-weight:800; font-size:11px;
+  letter-spacing:.2em; text-transform:uppercase; color:var(--accent)}
+.mast h1{font-family:var(--sans); font-weight:700; font-size:clamp(28px,5vw,42px);
+  line-height:1.14; letter-spacing:-.022em; margin:9px 0 0; text-wrap:balance}
+.mast .sub{margin:13px 0 0; max-width:60ch; color:var(--ink-2); font-size:15.5px}
+
+/* ---- tabs ---- */
+.tabs{margin:30px 0 0; border-bottom:2px solid var(--ink);
+  display:flex; flex-wrap:wrap; gap:0 2px; overflow:hidden}
+.tab{flex:0 0 auto; appearance:none; background:transparent; border:none;
+  border-bottom:3px solid transparent; margin-bottom:-2px;
+  font-family:var(--sans); font-weight:600; font-size:16px; color:var(--ink-2);
+  padding:13px 20px 12px; cursor:pointer; white-space:nowrap; line-height:1.35;
+  transition:background .12s, color .12s}
+.tab:hover{color:var(--ink); background:var(--surface-2)}
+.tab[aria-selected="true"]{color:var(--ink); font-weight:700;
+  border-bottom-color:var(--accent); background:var(--accent-soft)}
+.tab:focus-visible{outline:2px solid var(--accent); outline-offset:-3px}
+.tab .n{font-family:var(--disp); font-weight:700; font-size:10.5px; letter-spacing:.14em;
+  color:var(--ink-3); display:block; margin-bottom:3px}
+.tab:hover .n{color:var(--ink-2)}
+.tab[aria-selected="true"] .n{color:var(--accent)}
+.panel[hidden]{display:none}
+.panel{padding-top:30px}
+.panel:focus{outline:none}
+
+@media (max-width:760px){
+  .tab{padding:11px 13px 10px; font-size:14.5px}
+  .tab .n{font-size:9.5px; letter-spacing:.1em; margin-bottom:2px}
+}
+
+/* ---- section head ---- */
+.sh{border-bottom:1px solid var(--rule); padding-bottom:8px; margin:38px 0 0}
+.sh:first-of-type{margin-top:0}
+.sh h2{font-size:19px; font-weight:700; letter-spacing:-.012em; margin:0; text-wrap:balance}
+.sh p{margin:7px 0 0; color:var(--ink-2); font-size:13.5px; max-width:66ch}
+
+/* ---- cards ---- */
+.cards{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:20px}
+@media (max-width:860px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface); border:1px solid var(--rule); padding:17px; display:flex; flex-direction:column}
+.card-p{font-family:var(--disp); font-weight:800; font-size:13px; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--accent)}
+.card-one{margin:8px 0 0; font-size:14px; font-weight:500; color:var(--ink); line-height:1.5}
+.card-rule{height:1px; background:var(--rule); margin:13px 0 12px}
+.card dl{margin:0}
+.card dt{font-family:var(--disp); font-weight:800; font-size:9.5px; letter-spacing:.13em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 3px}
+.card dd{margin:0 0 12px; font-size:13.5px; color:var(--ink-2)}
+.card dd:last-child{margin-bottom:0}
+.card dd b{color:var(--ink); font-weight:500}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto; margin-top:18px}
+table{width:100%; border-collapse:collapse; font-size:14px}
+table.tri{min-width:680px}
+table.duo{min-width:560px}
+/* '한눈에 비교' 표에만 적용되는 가독성 규칙 */
+table.cmp{min-width:760px}
+table.cmp thead th{padding:11px 14px; background:var(--surface-2);
+  border-bottom:2px solid var(--rule); font-size:10.5px}
+table.cmp thead th.hl{font-size:11.5px}
+table.cmp thead th + th{border-left:1px solid var(--rule)}
+table.cmp td{padding:13px 14px; line-height:1.6}
+table.cmp td + td{border-left:1px solid var(--rule-2)}
+table.cmp td b{font-weight:600}
+table.cmp tbody tr:nth-child(odd){background:var(--surface)}
+table.cmp td.lab{width:19%; min-width:120px; font-weight:600; background:var(--surface-2)}
+thead th{text-align:left; font-family:var(--disp); font-weight:800; font-size:10px;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--ink-3);
+  padding:12px 13px 8px; border-bottom:1px solid var(--rule); white-space:nowrap}
+thead th.hl{color:var(--ink)}
+td{padding:10px 13px; border-bottom:1px solid var(--rule-2); vertical-align:top; color:var(--ink-2)}
+td b{color:var(--ink); font-weight:500}
+td.lab{color:var(--ink); width:22%; min-width:132px}
+td.key{white-space:nowrap; width:1%; padding-right:20px}
+td.sep{border-left:1px solid var(--rule-2)}
+tbody tr:last-child td{border-bottom:none}
+tr.grp td{background:var(--surface-2); padding:7px 13px; font-family:var(--disp);
+  font-weight:800; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ink-2); border-bottom:1px solid var(--rule)}
+
+/* ---- inline bits ---- */
+kbd{display:inline-block; font-family:var(--mono); font-size:12px; font-weight:500;
+  line-height:1.4; padding:2px 6px; color:var(--ink); background:var(--cap-bg);
+  border:1px solid var(--cap-rule); border-radius:3px; box-shadow:0 1.5px 0 var(--cap-sh); white-space:nowrap}
+code{font-family:var(--mono); font-size:12.5px; font-weight:500; color:var(--accent-ink);
+  background:var(--accent-soft); padding:2px 6px; border-radius:3px}
+td code,.note code{font-size:12px}
+.na{font-family:var(--disp); font-weight:600; font-size:11px; letter-spacing:.07em;
+  text-transform:uppercase; color:var(--warn)}
+.dash{color:var(--ink-3); font-family:var(--mono); font-size:12px}
+.tag{display:inline-block; font-family:var(--disp); font-weight:800; font-size:9px;
+  letter-spacing:.1em; text-transform:uppercase; padding:2px 6px; border-radius:2px;
+  vertical-align:1px; margin-left:5px; white-space:nowrap}
+.t-warn{color:var(--warn); background:var(--warn-soft); border:1px solid var(--warn-rule)}
+.t-ok{color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent)}
+
+/* ---- notes ---- */
+.note{margin:18px 0 0; padding:14px 16px; background:var(--surface);
+  border:1px solid var(--rule); border-left:3px solid var(--accent); font-size:13.5px}
+.note.warn{background:var(--warn-soft); border-color:var(--warn-rule); border-left-color:var(--warn)}
+.note-h{display:block; font-family:var(--disp); font-weight:800; font-size:10px;
+  letter-spacing:.15em; text-transform:uppercase; color:var(--accent); margin-bottom:5px}
+.note.warn .note-h{color:var(--warn)}
+.note p{margin:6px 0 0} .note p:first-of-type{margin-top:0}
+.note b{font-weight:500}
+
+/* ---- 스크롤바 숨김 (스크롤 기능은 유지) ---- */
+html,body{scrollbar-width:none; -ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0; height:0; display:none}
+
+/* ---- 레벨 스위치 (배타: 각 수준은 자기 내용만. 표시 없는 것은 항상 보임) ---- */
+body[data-lv="1"] .lv-2, body[data-lv="1"] .lv-3,
+body[data-lv="2"] .lv-1, body[data-lv="2"] .lv-3,
+body[data-lv="3"] .lv-1, body[data-lv="3"] .lv-2,
+body[data-lv="3"] .lv-12, body[data-lv="1"] .lv-23{display:none !important}
+.lvtag{display:inline-block; font-family:var(--disp); font-weight:800; font-size:9px;
+  letter-spacing:.1em; text-transform:uppercase; padding:2px 6px; border-radius:2px;
+  vertical-align:2px; margin-left:6px; white-space:nowrap;
+  color:var(--accent-ink); background:var(--accent-soft); border:1px solid var(--accent)}
+.lvtag.t3{color:var(--warn); background:var(--warn-soft); border-color:var(--warn-rule)}
+
+/* ---- OS switch ---- */
+body[data-os="mac"] .os-win,
+body[data-os="win"] .os-mac{display:none !important}
+.osbar{margin:20px 0 0; display:flex; align-items:center; gap:12px; flex-wrap:wrap}
+.osbar-lab{font-family:var(--disp); font-weight:800; font-size:10px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3)}
+.osseg{display:inline-flex; border:1px solid var(--rule); background:var(--surface); overflow:hidden}
+.osbtn{appearance:none; background:transparent; border:none; cursor:pointer;
+  font-family:var(--sans); font-weight:500; font-size:13.5px; color:var(--ink-2);
+  padding:7px 18px; line-height:1.4; white-space:nowrap}
+.osbtn + .osbtn{border-left:1px solid var(--rule)}
+.osbtn:hover{color:var(--ink); background:var(--surface-2)}
+.osbtn[aria-pressed="true"]{background:var(--accent); color:var(--surface); font-weight:700}
+.osbtn:focus-visible{outline:2px solid var(--accent); outline-offset:-3px}
+.osnote{font-size:12.5px; color:var(--ink-3)}
+
+/* ---- 영상 카드 ---- */
+.vidbox{display:block; margin:16px 0 0; border:1px solid var(--rule);
+  border-left:3px solid var(--accent); background:var(--surface);
+  text-decoration:none; color:inherit;
+  transition:border-color .12s, box-shadow .12s}
+.vidbox:hover{border-color:var(--accent); box-shadow:0 2px 14px rgba(0,0,0,.09)}
+.vidbox:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.vidframe{position:relative; display:block; width:100%; aspect-ratio:16/9;
+  background:var(--surface-2); overflow:hidden}
+.vidthumb{display:block; width:100%; height:100%; object-fit:cover}
+.vidshade{position:absolute; inset:0;
+  background:radial-gradient(circle at 50% 50%, rgba(0,0,0,.34), rgba(0,0,0,.06) 62%);
+  transition:opacity .14s}
+.vidbox:hover .vidshade{opacity:.6}
+.vidplay{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:66px; height:66px; border-radius:50%; background:var(--accent);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 3px 16px rgba(0,0,0,.3); transition:transform .14s}
+.vidbox:hover .vidplay{transform:translate(-50%,-50%) scale(1.07)}
+.vidplay svg{width:24px; height:24px; margin-left:4px; fill:var(--surface)}
+.vidlen{position:absolute; right:10px; bottom:10px; padding:2px 7px;
+  background:rgba(0,0,0,.78); color:#fff; border-radius:3px;
+  font-family:var(--disp); font-size:11.5px; font-weight:700;
+  letter-spacing:.03em; font-variant-numeric:tabular-nums}
+.vid-meta{display:flex; flex-wrap:wrap; align-items:baseline; gap:5px 12px;
+  padding:13px 16px; border-top:1px solid var(--rule)}
+.vid-t{font-family:var(--sans); font-weight:700; font-size:15.5px;
+  color:var(--ink); line-height:1.45}
+.vid-n{font-size:12.5px; color:var(--ink-3); line-height:1.6}
+.vid-n b{color:var(--ink-2); font-weight:600}
+.vid-a{margin-left:auto; font-size:12.5px; font-weight:700;
+  color:var(--accent-ink); white-space:nowrap}
+.vidbox:hover .vid-a{text-decoration:underline}
+@media (max-width:700px){
+  .vid-meta{padding:12px 14px}
+  .vid-t{font-size:14.5px}
+  .vid-a{margin-left:0}
+  .vidplay{width:54px; height:54px}
+  .vidplay svg{width:20px; height:20px}
+}
+
+/* ---- links & resources ---- */
+a.lnk{color:var(--accent-ink); text-decoration:none; border-bottom:1px solid var(--accent);
+  font-weight:500; overflow-wrap:anywhere}
+a.lnk:hover{background:var(--accent-soft)}
+a.lnk:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+td .u{display:block; font-family:var(--mono); font-size:11px; color:var(--ink-3);
+  margin-top:3px; overflow-wrap:anywhere}
+.lvl{font-family:var(--disp); font-weight:800; font-size:9px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); white-space:nowrap}
+
+/* ---- code block ---- */
+pre{margin:16px 0 0; padding:14px 16px; background:var(--surface-2);
+  border:1px solid var(--rule); overflow-x:auto; font-size:12.5px; line-height:1.6}
+pre code{background:none; padding:0; color:var(--ink); font-size:12.5px; white-space:pre}
+pre .c{color:var(--ink-3)}
+pre .fm{color:var(--accent-ink); font-weight:700}
+.cap{margin:7px 0 0; font-size:12.5px; color:var(--ink-3)}
+
+/* ---- steps ---- */
+ol.steps{margin:18px 0 0; padding:0; list-style:none; counter-reset:s}
+ol.steps li{counter-increment:s; position:relative; padding:0 0 0 34px; margin:0 0 14px; font-size:14px; color:var(--ink-2)}
+ol.steps li:last-child{margin-bottom:0}
+ol.steps li::before{content:counter(s); position:absolute; left:0; top:1px;
+  width:22px; height:22px; border-radius:50%; background:var(--accent-soft);
+  border:1px solid var(--accent); color:var(--accent-ink);
+  font-family:var(--disp); font-weight:800; font-size:11px;
+  display:flex; align-items:center; justify-content:center}
+ol.steps li b{color:var(--ink); font-weight:500}
+
+.foot{margin-top:52px; padding-top:18px; border-top:2px solid var(--ink);
+  font-size:12.5px; color:var(--ink-3)}
+.foot .fm{font-family:var(--mono); font-size:11.5px}
+
+/* ============ 좁은 화면 (휴대폰) ============ */
+@media (max-width:700px){
+  .wrap{padding:0 16px 72px}
+  .mast{padding:34px 0 0}
+  .mast .sub{font-size:15px}
+  .osbar{gap:10px}
+  .osnote{font-size:12px}
+  .blk, .panel{padding-top:22px}
+  .sh{margin-top:30px}
+  .sh h2{font-size:18px}
+
+  /* 표를 카드로 — 가로 스크롤 없이 읽히게 */
+  .tw{overflow-x:visible; margin-top:14px}
+  .tw table{min-width:0 !important; width:100%; display:block}
+  .tw thead{display:none}
+  .tw tbody{display:block}
+  .tw tbody tr{display:block; background:var(--surface);
+    border:1px solid var(--rule); margin:0 0 10px; padding:0}
+  .tw tbody tr:last-child{margin-bottom:0}
+  .tw td{display:block; width:auto !important; min-width:0 !important;
+    border:none; border-top:1px solid var(--rule-2); padding:11px 13px;
+    white-space:normal; line-height:1.6}
+  /* 첫 칸은 카드 제목처럼 (클래스가 아니라 위치 기준 — key가 2번째인 표도 있음) */
+  .tw tr:not(.grp) td:first-child{border-top:none; background:var(--surface-2);
+    color:var(--ink); font-weight:700; font-size:14.5px}
+
+  /* 다열 표: 열 이름을 셀 위에 붙여 어느 열인지 알 수 있게 */
+  .tw td[data-l]::before{content:attr(data-l); display:block;
+    font-family:var(--disp); font-weight:800; font-size:9.5px;
+    letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3);
+    margin-bottom:4px}
+
+  /* 그룹 구분행은 카드가 아니라 소제목처럼 */
+  .tw tbody tr.grp{border:none; background:transparent; margin:14px 0 6px}
+  .tw tr.grp td{background:transparent; border:none; padding:0 2px 4px}
+
+  pre{font-size:11.5px; padding:12px 13px}
+  ol.steps li{padding-left:30px; font-size:13.5px}
+  .cards{gap:10px}
+  .card{padding:15px}
+  .note{padding:13px 14px; font-size:13px}
+}
+
+@media (max-width:430px){
+  .tab{padding:10px 10px 9px; font-size:13.5px}
+  .osbtn{padding:8px 14px; font-size:13px}
+  .osbar-lab{width:100%}
+}
+
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important}}
+
+/* ---- 영상 인페이지 재생 ---- */
+button.vidframe{appearance:none; -webkit-appearance:none; border:none; padding:0; margin:0;
+  cursor:pointer; font:inherit; color:inherit; text-align:inherit; width:100%}
+button.vidframe:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.vidframe iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+a.vid-a{text-decoration:none}
+a.vid-a:hover{text-decoration:underline}
+</style>
+
+<div class="wrap">
+
+  <header class="mast">
+    <span class="mast-eye">Mac · Windows</span>
+    <h1>클로드 뽕 뽑기</h1>
+    <p class="sub"><b>Claude를 처음 쓰는 분을 위한 안내서.</b> 무엇부터 해볼지, 어떤 일을 어디에 맡기는지, 손이 빨라지는 요령과 반복 업무를 맡기는 방법까지. 회사에서 <b>Mac과 Windows를 함께 쓰는 경우</b>의 차이도 표시했습니다.</p>
+
+    <div class="osbar">
+      <span class="osbar-lab">내 컴퓨터</span>
+      <div class="osseg" role="group" aria-label="운영체제 선택">
+        <button class="osbtn" id="os-mac" aria-pressed="true">Mac</button>
+        <button class="osbtn" id="os-win" aria-pressed="false">Windows</button>
+      </div>
+      <span class="osnote">고르면 <b>그 컴퓨터에 맞는 단축키와 안내만</b> 보여줍니다.</span>
+    </div>
+
+    <div class="osbar">
+      <span class="osbar-lab">내 수준</span>
+      <div class="osseg" role="group" aria-label="수준 선택">
+        <button class="osbtn" id="lv-1" aria-pressed="true">애기</button>
+        <button class="osbtn" id="lv-2" aria-pressed="false">청소년</button>
+        <button class="osbtn" id="lv-3" aria-pressed="false">성인</button>
+      </div>
+      <span class="osnote lv-1"><b>Chat만 써봤다면 애기.</b> 프로젝트를 만들어 자료를 올려두고 쓴다면 <b>청소년</b>으로 올리세요.</span><span class="osnote lv-2"><b>업무에 쓰고 있고 반복이 보인다면 청소년.</b> 남이 쓸 스킬·예약 작업을 만들어봤다면 <b>성인</b>으로.</span><span class="osnote lv-3"><b>워크플로를 설계하는 단계가 성인.</b> 기초 안내는 빠지고 규격 · 정책 · 실패 모드만 남습니다.</span>
+    </div>
+
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="주제">
+    <button class="tab lv-1" role="tab" id="t0" aria-controls="p0" aria-selected="true">
+      <span class="n">01</span>셋의 차이
+    </button>
+    <button class="tab lv-12" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1">
+      <span class="n">02</span>용어
+    </button>
+    <button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1">
+      <span class="n">03</span>잘 쓰는 법
+    </button>
+    <button class="tab lv-23" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1">
+      <span class="n">04</span>스킬
+    </button>
+    <button class="tab lv-23" role="tab" id="t4" aria-controls="p4" aria-selected="false" tabindex="-1">
+      <span class="n">05</span>업무 자동화
+    </button>
+    <button class="tab" role="tab" id="t5" aria-controls="p5" aria-selected="false" tabindex="-1">
+      <span class="n">06</span>단축키
+    </button>
+    <button class="tab" role="tab" id="t6" aria-controls="p6" aria-selected="false" tabindex="-1">
+      <span class="n">07</span>교육
+    </button>
+  </div>
+
+  <!-- ================= PANEL 0 :: 셋의 차이 ================= -->
+  <section class="panel" role="tabpanel" id="p0" aria-labelledby="t0" tabindex="0">
+
+    <div class="note lv-1">
+      <span class="note-h">앱 하나에 세 개가 들어 있습니다</span>
+      <p>Claude 앱을 열면 <b>왼쪽에 Chat · Cowork · Code</b> 세 가지가 있습니다. 같은 앱이지만 <b>하는 일이 다릅니다.</b> 클릭해서 오가면 됩니다.</p>
+      <p>처음이라면 <b>Chat부터</b> 쓰세요. 나머지는 필요해질 때 보면 됩니다.</p>
+    </div>
+
+    <div class="sh">
+      <h2>내 일은 어디로? <span class="tag t-ok">여기만 봐도 됨</span></h2>
+      <p>실제로 자주 하는 일들을 어디로 보내면 되는지 정리했습니다.</p>
+    </div>
+    <div class="tw">
+      <table class="duo">
+        <thead><tr><th>이런 일</th><th class="hl">어디로</th><th>왜</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">메일 · 문서 초안 쓰기</td><td data-l="어디로"><b>Chat</b></td><td class="sep" data-l="왜">주고받으며 다듬는 일. 내가 보면서 고치는 게 빠릅니다.</td></tr>
+          <tr><td class="lab">받은 자료 요약 · 검토</td><td data-l="어디로"><b>Chat</b></td><td class="sep" data-l="왜">파일을 끌어다 놓고 물어보면 됩니다.</td></tr>
+          <tr><td class="lab">아이디어 정리, 질문</td><td data-l="어디로"><b>Chat</b></td><td class="sep" data-l="왜">가장 기본. 대화하듯 쓰면 됩니다.</td></tr>
+          <tr><td class="lab">엑셀 · PPT 파일 만들기</td><td data-l="어디로"><b>Chat</b></td><td class="sep" data-l="왜">파일로 받는 것까지 Chat에서 됩니다. <b>스킬</b> 탭 참고.</td></tr>
+          <tr><td class="lab">내 폴더의 파일 여러 개 정리</td><td data-l="어디로"><b>Cowork</b></td><td class="sep" data-l="왜">Chat은 <b>올려준 파일만</b> 봅니다. 폴더째 다루려면 Cowork입니다.</td></tr>
+          <tr><td class="lab">여러 단계로 오래 걸리는 일</td><td data-l="어디로"><b>Cowork</b></td><td class="sep" data-l="왜">맡겨두고 다른 일을 할 수 있습니다.</td></tr>
+          <tr><td class="lab">매주 반복되는 일</td><td data-l="어디로"><b>Cowork</b></td><td class="sep" data-l="왜">예약해두면 알아서 돕니다. <b>업무 자동화</b> 탭 참고.</td></tr>
+          <tr><td class="lab">웹사이트를 돌아다니며 하는 일</td><td data-l="어디로"><b>Cowork</b></td><td class="sep" data-l="왜">브라우저를 직접 조작할 수 있습니다.</td></tr>
+          <tr><td class="lab">웹페이지 · 사내 도구 만들기</td><td data-l="어디로"><b>Code</b></td><td class="sep" data-l="왜"><b>코드를 몰라도 됩니다.</b> 말로 설명하면 만들어주고, 만든 화면을 띄워 보여줍니다. <b>잘 쓰는 법</b> 탭 참고.</td></tr>
+          <tr><td class="lab">엑셀 자료를 보기 좋은 화면으로</td><td data-l="어디로"><b>Code</b></td><td class="sep" data-l="왜">표와 차트가 있는 페이지로 만들어 팀에 공유할 수 있습니다.</td></tr>
+          <tr><td class="lab">프로그램 코드 고치기</td><td data-l="어디로"><b>Code</b></td><td class="sep" data-l="왜">개발자라면 여기가 본업입니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh">
+      <h2>한 줄로 구분하면</h2>
+    </div>
+    <div class="cards three">
+      <div class="card">
+        <span class="card-p">Chat</span>
+        <p class="card-one">내가 보면서 주고받는다.</p>
+        <div class="card-rule"></div>
+        <dl>
+          <dt>쓸 수 있는 조건</dt>
+          <dd>없습니다. <b>앱만 켜면 됩니다.</b></dd>
+          <dt>못 하는 것</dt>
+          <dd>내 컴퓨터 폴더를 뒤지는 일. <b>올려준 파일만</b> 봅니다.</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <span class="card-p">Cowork</span>
+        <p class="card-one">맡겨두고 결과를 받는다.</p>
+        <div class="card-rule"></div>
+        <dl>
+          <dt>쓸 수 있는 조건</dt>
+          <dd><b>유료 요금제</b>가 필요하고, <b>운영체제 버전 조건</b>이 앱보다 높습니다.</dd>
+          <dt>주의</dt>
+          <dd>내 파일을 다루는 작업은 <b>앱을 닫으면 멈춥니다.</b></dd>
+        </dl>
+      </div>
+      <div class="card">
+        <span class="card-p">Code</span>
+        <p class="card-one">말로 설명하면 만들어준다.</p>
+        <div class="card-rule"></div>
+        <dl>
+          <dt>비개발자도 쓰나</dt>
+          <dd><b>네.</b> 웹페이지, 사내 도구, 자료 정리를 <b>코드 없이</b> 만듭니다. 만든 화면을 띄워 보여주니 보면서 고치면 됩니다.</dd>
+          <dt>쓸 수 있는 조건</dt>
+          <dd>작업할 <b>폴더를 허용</b>해주면 시작됩니다.<span class="os-win"> Windows는 <b>Git 설치</b>가 한 번 필요합니다.</span></dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="note">
+      <span class="note-h">Chat과 Cowork가 가장 헷갈립니다</span>
+      <p>구분하는 질문은 하나입니다 — <b>"내가 옆에서 보고 있어야 하는 일인가?"</b></p>
+      <p>답을 보고 바로 고쳐야 하면 <b>Chat</b>. 결과만 나중에 확인하면 되는 일이면 <b>Cowork</b>. 그리고 <b>내 컴퓨터 폴더를 다뤄야 하면 무조건 Cowork</b>입니다 — Chat은 못 합니다.</p>
+    </div>
+
+    <div class="sh">
+      <h2>한눈에 비교</h2>
+      <p>고를 때 이 표만 보면 됩니다. <b>위 네 줄</b>이 판단의 대부분입니다.</p>
+    </div>
+    <div class="tw">
+      <table class="tri cmp">
+        <thead><tr><th style="width:19%">항목</th><th class="hl" style="width:27%">Chat</th><th class="hl" style="width:27%">Cowork</th><th class="hl" style="width:27%">Code</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">한 줄로</td>
+            <td data-l="Chat">물어보고 <b>바로 받는다</b></td>
+            <td data-l="Cowork"><b>맡겨두고</b> 결과를 받는다</td>
+            <td class="sep" data-l="Code">말로 설명해서 <b>만든다</b></td>
+          </tr>
+          <tr>
+            <td class="lab">이런 일에</td>
+            <td data-l="Chat">메일 · 문서 초안, 자료 요약, 검토, 질문</td>
+            <td data-l="Cowork">폴더의 파일 여러 개 정리, 매주 반복되는 일, 웹을 돌아다니는 조사</td>
+            <td class="sep" data-l="Code">웹페이지, 사내 도구, 자료를 보여주는 화면</td>
+          </tr>
+          <tr>
+            <td class="lab">내가 지켜봐야 하나</td>
+            <td data-l="Chat"><b>예</b> — 주고받으며 고칩니다</td>
+            <td data-l="Cowork"><b>아니오</b> — 맡기고 딴 일 하면 됩니다</td>
+            <td class="sep" data-l="Code">중간중간 <b>화면을 보며</b></td>
+          </tr>
+          <tr>
+            <td class="lab">내 컴퓨터 파일을 다루나</td>
+            <td data-l="Chat">아니오 — <b>올려준 것만</b></td>
+            <td data-l="Cowork"><b>예</b> — 앱이 열려 있을 때만</td>
+            <td class="sep" data-l="Code"><b>예</b> — 허용한 폴더에서</td>
+          </tr>
+          <tr>
+            <td class="lab">무엇이 나오나</td>
+            <td data-l="Chat">대화 속 답변. <b>문서 · 엑셀 · PPT</b> 파일로도 받습니다</td>
+            <td data-l="Cowork">정리된 <b>파일과 결과물</b>. 메신저로 요약을 올리게도 됩니다</td>
+            <td class="sep" data-l="Code"><b>실제로 열리는</b> 페이지나 도구</td>
+          </tr>
+          <tr>
+            <td class="lab">컴퓨터를 꺼도 되나</td>
+            <td data-l="Chat">아니오</td>
+            <td data-l="Cowork"><b>일부 가능</b> — 내 파일이 필요 없는 작업은 계속됩니다</td>
+            <td class="sep" data-l="Code">아니오</td>
+          </tr>
+          <tr>
+            <td class="lab">시작 전에 할 일</td>
+            <td data-l="Chat"><b>없음</b> — 그냥 물어보면 됩니다</td>
+            <td data-l="Cowork">작업할 <b>폴더 허용</b></td>
+            <td class="sep" data-l="Code">작업할 <b>폴더 허용</b></td>
+          </tr>
+          <tr>
+            <td class="lab">요금제</td>
+            <td data-l="Chat"><b>무료로도</b> 됩니다</td>
+            <td data-l="Cowork"><b>유료 필요</b></td>
+            <td class="sep" data-l="Code">요금제에 따라 다름</td>
+          </tr>
+          <tr class="os-win">
+            <td class="lab">Windows에서 더 필요한 것</td>
+            <td data-l="Chat"><span class="dash">—</span></td>
+            <td data-l="Cowork">설치할 때 <b>관리자 권한</b>, 그리고 <b>가상화 기능 켜기</b></td>
+            <td class="sep" data-l="Code"><b>Git 설치</b> 한 번</td>
+          </tr>
+          <tr>
+            <td class="lab">자주 하는 실수</td>
+            <td data-l="Chat">내 폴더의 파일을 다뤄달라고 함<br><span style="color:var(--ink-3)">→ 그건 Cowork입니다</span></td>
+            <td data-l="Cowork">맡겨놓고 <b>앱을 닫아버림</b><br><span style="color:var(--ink-3)">→ 내 파일 작업이 멈춥니다</span></td>
+            <td class="sep" data-l="Code">되돌릴 지점 없이 큰 작업을 시작<br><span style="color:var(--ink-3)">→ "지금 상태 저장해줘"부터</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+    <div class="sh lv-1">
+      <h2>이 순서로 익히세요</h2>
+    </div>
+    <ol class="steps lv-1">
+      <li><b>Chat으로 2주 정도 써보세요.</b> 실제 업무에 쓰면서 감을 잡는 게 먼저입니다. 이것만으로도 대부분의 일이 됩니다.</li>
+      <li><b>"이걸 맡겨두고 딴 일 하고 싶다"는 생각이 들면</b> 그때 Cowork를 열어보세요. 필요를 느낀 뒤에 배우는 게 훨씬 빠릅니다.</li>
+      <li><b>같은 일을 반복하고 있다면</b> <b>업무 자동화</b> 탭으로. 예약해두면 알아서 돕니다.</li>
+      <li><b>"이런 페이지가 있으면 좋겠다" 싶으면 Code를 열어보세요.</b> 개발자만 쓰는 곳이 아닙니다 — 코드를 몰라도 말로 설명하면 만들어줍니다. <b>잘 쓰는 법</b> 탭에 시작하는 방법이 있습니다.</li>
+    </ol>
+  </section>
+
+  <!-- ================= PANEL 1 :: 용어 ================= -->
+  <section class="panel" role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0" hidden>
+    <div class="note lv-1">
+      <span class="note-h">이 탭은 이럴 때 보세요</span>
+      <p>앱 화면에 <b>영어 단어</b>가 그대로 나오는 곳이 많습니다. 뜻만 알면 헤맬 일이 없으니, <b>모르는 말이 보일 때 찾아보는 용도</b>로 쓰세요. 처음부터 외울 필요는 없습니다.</p>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>세 화면 이름</h2>
+      <p>왼쪽에 나란히 있는 세 가지입니다. 이것만 구분되면 절반은 끝입니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>이름</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">Chat</td><td>대화하며 주고받는 곳. <b>가장 기본</b>이고 여기서 대부분의 일을 합니다.</td></tr>
+          <tr><td class="lab">Cowork</td><td><b>일을 맡겨두는 곳.</b> 내 폴더의 파일을 다루거나 오래 걸리는 작업을 넘길 때.</td></tr>
+          <tr><td class="lab">Code</td><td><b>만드는 곳.</b> 웹페이지나 도구를 만들 때. 코드를 몰라도 쓸 수 있습니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>메뉴에서 보이는 영어</h2>
+      <p>설정을 찾을 때 마주치는 단어들입니다. <b>어디에 쓰는 곳인지</b>를 함께 적었습니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>보이는 말</th><th>뜻과 용도</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">Projects<br><span class="lvl">프로젝트</span></td><td>같은 주제의 <b>대화와 자료를 묶는 폴더.</b> 자료를 한 번 올려두면 그 안의 모든 대화가 참고합니다. <b>계속 돌아오는 주제라면 만드는 게 낫습니다.</b></td></tr>
+          <tr><td class="lab">Artifacts<br><span class="lvl">아티팩트</span></td><td>결과물이 <b>대화 옆 별도 창</b>으로 열린 것. 문서 · 표 · 웹페이지가 이렇게 나옵니다. 공유 링크로도 만들 수 있습니다.</td></tr>
+          <tr><td class="lab">Customize</td><td><b>내 설정을 손보는 메뉴.</b> 스킬과 연동을 켜고 끄는 곳이 여기 있습니다.</td></tr>
+          <tr><td class="lab">Capabilities</td><td>설정에서 <b>기능을 켜는 곳.</b> 엑셀 · PPT 파일을 만들려면 여기서 <b>코드 실행</b>을 켜야 합니다. <b>"파일이 안 만들어져요"의 원인이 대개 이것.</b></td></tr>
+          <tr><td class="lab">Skills<br><span class="lvl">스킬</span></td><td><b>자주 쓰는 지시를 저장해둔 것.</b> 매번 설명하지 않아도 됩니다.</td></tr>
+          <tr><td class="lab">Connectors<br><span class="lvl">커넥터 · 연동</span></td><td>Gmail · 드라이브 · Outlook처럼 <b>내가 쓰는 서비스를 연결</b>하는 기능. <b>세 이름이 같은 뜻</b>입니다.</td></tr>
+          <tr><td class="lab">Plugins<br><span class="lvl">플러그인</span></td><td>기능을 <b>묶음으로 추가</b>하는 확장. 입력창 옆 <code>+</code> 메뉴에 스킬 · 연동과 함께 있습니다.</td></tr>
+          <tr><td class="lab">Routines</td><td><b>예약 작업.</b> "매주 월요일 아침에 해줘"를 저장해두는 곳입니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>알아두면 좋은 말</h2>
+      <p>안내문이나 기사에서 마주치는 표현들입니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>말</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">프롬프트</td><td>내가 입력하는 <b>요청문.</b> 특별한 게 아니라 그냥 "물어보는 말"입니다.</td></tr>
+          <tr><td class="lab">모델</td><td>Claude의 <b>성능 단계.</b> <b>Opus · Sonnet · Haiku</b> 같은 이름이 붙고, 대체로 Opus가 가장 성능이 높고 Haiku가 가장 빠릅니다. 요금제에 따라 고를 수 있는 게 다릅니다.</td></tr>
+          <tr><td class="lab">사용 한도</td><td>일정 시간 안에 쓸 수 있는 <b>양의 상한.</b> 도달하면 기다리거나 요금제를 올려야 합니다. <b>고장이 아닙니다.</b></td></tr>
+          <tr><td class="lab">컨텍스트</td><td>한 대화에서 <b>Claude가 기억하고 있는 내용 전체.</b> 대화가 길어지면 차오르고, 그래서 <b>주제가 바뀌면 새 대화</b>가 좋습니다.</td></tr>
+          <tr><td class="lab">환각<br><span class="lvl">hallucination</span></td><td>틀린 내용을 <b>맞는 것처럼 자신 있게</b> 말하는 현상. 그래서 숫자 · 인용 · 최신 정보는 <b>확인하고 써야</b> 합니다.</td></tr>
+          <tr><td class="lab">신뢰 · 허용</td><td>Claude가 <b>어느 폴더까지 다뤄도 되는지</b> 내가 승인하는 것. Cowork와 Code가 시작할 때 물어봅니다. <b>필요한 폴더만</b> 주는 게 안전합니다.</td></tr>
+          <tr><td class="lab">음성 모드</td><td>타이핑 대신 <b>말로 입력하는</b> 기능. 긴 요청을 설명할 때 편합니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>일 맡기면서 만나는 말 <span class="lvtag">청소년</span></h2>
+      <p>Cowork에 맡기거나 예약 작업을 만들기 시작하면 이 말들이 나옵니다. <b>뜻을 알아야 설정을 고를 수 있습니다.</b></p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>말</th><th>뜻과 판단 기준</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">권한 모드</td>
+            <td>Claude가 <b>얼마나 물어보고 진행할지</b>를 정하는 설정. 파일을 고칠 때마다 확인받을지, 알아서 하게 둘지 고릅니다. <b>처음 맡길 때는 확인받는 쪽</b>으로 시작해 익숙해지면 풀어주는 게 안전합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">계획 모드</td>
+            <td>손대기 <b>전에</b> "이렇게 하겠다"를 먼저 설명하게 하는 모드. 큰 작업은 <b>계획을 확인한 뒤 실행</b>으로 넘기는 순서가 공식 권장입니다. 방향이 틀렸을 때 버릴 게 적습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">세션</td>
+            <td><b>하나의 작업 창.</b> 여러 개를 동시에 열어두고 각각 다른 일을 시킬 수 있습니다. 하나가 끝날 때까지 기다릴 필요가 없습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">클라우드 · 로컬</td>
+            <td>작업이 <b>어디서 도는지</b>를 가리킵니다. <b>클라우드</b>는 컴퓨터를 꺼도 계속되지만 <b>내 파일에 닿지 못합니다.</b> <b>로컬</b>은 내 파일을 다루지만 앱이 열려 있어야 합니다. 예약 작업을 만들 때 이 둘 중 하나를 고릅니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">트리거</td>
+            <td>예약 작업을 <b>시작시키는 조건.</b> 시간(매주 월요일)이 가장 흔하고, 그 밖에 외부 시스템의 호출이나 저장소 이벤트로도 시작할 수 있습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">폴더 허용 · 신뢰</td>
+            <td>Claude가 <b>어느 폴더까지 다뤄도 되는지</b> 내가 승인하는 것. Cowork와 Code가 시작할 때 묻습니다. <b>홈 폴더째 주지 말고</b> 필요한 폴더만 주세요 — 한 번 허용하면 계속 유지됩니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>기술 용어 — 들리면 알아둘 것 <span class="lvtag">청소년</span></h2>
+      <p>기사나 IT 담당자와의 대화에서 나오는 말입니다. <b>뜻만 알면 되고, 직접 다룰 일은 없습니다.</b></p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>말</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">LLM<br><span class="lvl">대규모 언어 모델</span></td>
+            <td>방대한 글을 학습해 <b>다음에 올 말을 예측</b>하도록 만든 프로그램. Claude도 이것입니다. "생각한다"기보다 <b>가장 그럴듯한 말을 이어붙인다</b>고 보면 <b>환각</b>이 왜 생기는지 이해됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">토큰</td>
+            <td>글을 잘게 쪼갠 <b>계량 단위.</b> 사용량과 한도가 이 단위로 계산됩니다. <b>한국어는 같은 분량의 영어보다 토큰을 더 많이 씁니다</b> — 긴 한글 문서를 여러 개 넣으면 한도가 빨리 찹니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">에이전트<br><span class="lvl">agent</span></td>
+            <td>일일이 지시받지 않고 <b>여러 단계를 스스로 밟아</b> 일을 끝내는 방식. <b>Cowork가 바로 이것</b>입니다. "AI 에이전트"라는 말이 나오면 이 이야기입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">API</td>
+            <td>다른 프로그램이 <b>Claude를 불러 쓰는 통로.</b> 사내 시스템이나 우리 서비스에 Claude를 붙일 때 개발자가 씁니다. <b>앱만 쓰신다면 몰라도 됩니다</b> — 다만 "API로 붙이자"는 말이 나오면 개발 작업이라는 뜻입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">MCP</td>
+            <td><b>연동(커넥터)을 만드는 공개 규격.</b> Gmail·드라이브처럼 기본 제공되는 연동 말고, <b>우리 회사 시스템을 붙일 때</b> IT가 이걸로 만듭니다. 이름이 나오면 "사내 연동을 새로 만드는 이야기"로 읽으면 됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">RAG<br><span class="lvl">검색 증강 생성</span></td>
+            <td>질문과 <b>관련된 부분만 자료에서 찾아 읽는</b> 방식. <b>프로젝트에 올린 자료를 참고하는 원리</b>가 이것입니다. 자료가 많아도 통째로 읽지 않고 필요한 데만 봅니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">프롬프트 엔지니어링</td>
+            <td><b>요청문을 잘 쓰는 기술.</b> 거창해 보이지만 <b>잘 쓰는 법</b> 탭에 있는 내용이 그것입니다 — 독자를 알려주고, 예시를 주고, 이어서 고치는 것.</td>
+          </tr>
+          <tr>
+            <td class="lab">바이브 코딩</td>
+            <td>코드를 직접 쓰지 않고 <b>말로 설명해서 만드는</b> 방식. <b>Code 탭이 바로 이것</b>이고, 비개발자도 웹페이지나 도구를 만들 수 있습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>회사 계정에서 나오는 말 <span class="lvtag">청소년</span></h2>
+      <p>IT 담당자와 이야기할 때 나옵니다. <b>사용자가 손댈 수 없는 것</b>이라 뜻만 알면 됩니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>말</th><th>뜻</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">조직 설정 · 관리자</td><td>회사 계정에서 <b>관리자가 정해두는 것들.</b> 스킬 · 연동 · 기능을 켜고 끌 수 있어서, <b>"내 화면엔 없다"의 원인이 대개 여기</b>입니다. 안 보이는 기능이 있으면 IT에 문의하세요.</td></tr>
+          <tr><td class="lab">Team · Enterprise</td><td><b>회사용 요금제.</b> 개인 요금제와 달리 관리자가 설정을 통제합니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+</section>
+
+  <!-- ================= PANEL 2 :: 잘 쓰는 법 ================= -->
+  <section class="panel" role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden>
+    <div class="sh lv-1">
+      <h2>첫 30분 — 이 순서대로</h2>
+      <p>설명을 읽는 대신 실제로 해보는 데 30분을 쓰는 편이 훨씬 빠릅니다.</p>
+    </div>
+    <ol class="steps lv-1">
+      <li><b>지금 하던 일을 그대로 물어보세요.</b> 연습용 질문이 아니라 실제 업무로 시작하는 게 중요합니다 — "이 메일 초안 다듬어줘", "이 표에서 이상한 값 찾아줘"처럼.</li>
+      <li><b>파일을 끌어다 놓으세요.</b> 문서 · 스프레드시트 · 이미지를 그냥 올리고 물어보면 됩니다. 스크린샷을 붙여 "이 화면에서 뭐가 잘못됐어?"도 됩니다.</li>
+      <li><b>입력창 맨 앞에 <kbd>/</kbd>를 쳐보세요.</b> 쓸 수 있는 기능 목록이 나옵니다. 대부분이 이걸 모르고 프롬프트만 길게 씁니다.</li>
+      <li><b>결과가 아쉬우면 이어서 고치세요.</b> 처음부터 완벽한 프롬프트를 쓰려 하지 말고 <b>"더 짧게", "표로", "존댓말로"</b>라고 덧붙이면 됩니다.</li>
+      <li><b>같은 주제는 프로젝트로 묶으세요.</b> 관련 자료와 대화를 한곳에 모아두면 매번 배경을 다시 설명하지 않아도 됩니다.</li>
+    </ol>
+
+    <div class="sh lv-1">
+      <h2>결과가 좋아지는 네 가지</h2>
+      <p>단순해 보이지만, 못 쓰는 경우는 거의 이 넷을 안 지켜서입니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>원칙</th><th>실제로 어떻게</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">구체적으로</td><td>"보고서 써줘"보다 <b>"이 데이터로 경영진용 한 장 요약을, 결론 먼저, 표 하나 포함해서"</b>. <b>누가 볼 것인지</b>와 <b>분량</b>만 넣어도 크게 달라집니다.</td></tr>
+          <tr><td class="lab">고쳐가며</td><td>한 번에 끝내려는 태도가 오히려 결과를 나쁘게 만듭니다. 이어서 지시하는 것이 정석입니다.</td></tr>
+          <tr><td class="lab">싫은 것도 말하기</td><td>원하는 것만 말하는 것보다 <b>"이런 건 빼줘"</b> 한 줄을 붙이는 게 효과가 큽니다.</td></tr>
+          <tr><td class="lab">주제가 바뀌면 새 대화로</td><td>한 대화에 여러 주제를 섞으면 앞 내용에 끌려갑니다. <kbd>⌘</kbd><kbd>N</kbd> · <kbd>Ctrl</kbd><kbd>N</kbd>.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note lv-1">
+      <span class="note-h">가장 중요한 판단</span>
+      <p>처음 쓰는 분이 시간을 버리는 이유는 기능을 몰라서가 아니라 <b>어떤 일을 어디로 보낼지</b> 몰라서입니다. 기준은 하나입니다.</p>
+      <p><b>내가 보면서 주고받을 일 → Chat. 맡겨두고 딴 일 할 수 있는 일 → Cowork. 코드를 고치는 일 → Code.</b></p>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>Chat — 결과가 확 달라지는 요령</h2>
+      <p>같은 질문도 어떻게 던지느냐에 따라 결과가 크게 갈립니다. 위 네 개만 써도 충분합니다.</p>
+    </div>
+    <ol class="steps lv-1">
+      <li><b>먼저 목차만 받아보세요.</b> 긴 문서를 한 번에 시키면 방향이 틀렸을 때 전부 버려야 합니다. <b>"먼저 목차만 짜봐"</b>로 시작해 방향을 맞춘 뒤 채우는 게 훨씬 빠릅니다.</li>
+      <li><b>예시를 주세요.</b> 우리 회사 문서 하나를 올리고 <b>"이런 톤으로 써줘"</b>라고 하면 설명 열 줄보다 정확합니다.</li>
+      <li><b>같은 주제는 프로젝트로 묶으세요.</b> 관련 자료와 대화를 한곳에 모아두면 매번 배경을 다시 설명하지 않아도 됩니다.</li>
+    </ol>
+    <div class="note warn lv-1">
+      <span class="note-h">이건 피하세요</span>
+      <p><b>숫자와 인용은 확인하고 쓰세요.</b> 특히 <b>그럴듯하게 맞는 것처럼</b> 나올 때가 위험합니다. 최종 결과물에 들어가는 수치는 직접 검증하세요.</p>
+      <p><b>내 컴퓨터의 파일을 봐야 하는 일은 Chat으로 안 됩니다.</b> Chat은 올려준 파일만 봅니다. 폴더째 다뤄야 하면 Cowork입니다.</p>
+    </div>
+
+    <div class="sh lv-12">
+      <h2>알아두면 크게 달라지는 세 가지</h2>
+      <p>기능 이름만 들어보고 안 쓰는 경우가 많습니다. <b>세 개 다 애기 단계에서도 바로 쓸 수 있습니다.</b></p>
+    </div>
+    <div class="tw lv-12">
+      <table class="duo">
+        <thead><tr><th>기능</th><th>무엇이고, 왜 쓰나</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">프로젝트</td>
+            <td><b>같은 주제의 대화와 자료를 한곳에 묶는 폴더</b>입니다. 관련 자료를 <b>한 번만 올려두면</b> 그 프로젝트 안의 모든 대화가 그걸 참고합니다.<br>
+            <span style="display:inline-block;margin-top:6px;color:var(--ink-3)">예: <i>"2026 신제품 출시"</i> 프로젝트를 만들고 기획서 · 경쟁사 자료 · 가격표를 올려두면, 그 안에서 물어볼 때마다 배경을 다시 설명하지 않아도 됩니다. <b>회의록, 고객 응대, 특정 제품처럼 계속 돌아오는 주제</b>라면 무조건 만드는 게 낫습니다.</span></td>
+          </tr>
+          <tr>
+            <td class="lab">아티팩트</td>
+            <td>문서나 표, 웹페이지처럼 <b>결과물이 대화 옆 별도 창</b>으로 열리는 것입니다. 대화에 섞여 스크롤로 사라지지 않습니다.<br>
+            <span style="display:inline-block;margin-top:6px;color:var(--ink-3)">거기서 바로 <b>"이 문단 줄여줘"</b>처럼 고쳐달라고 할 수 있고, <b>공유 링크로 만들어 팀에 보낼</b> 수도 있습니다. 긴 문서나 자료를 만들 때 <b>"아티팩트로 만들어줘"</b>라고 하면 그 형태로 나옵니다.</span></td>
+          </tr>
+          <tr>
+            <td class="lab">연동</td>
+            <td>내가 쓰는 서비스를 연결해두면 <b>파일을 매번 올리지 않아도</b> 됩니다. <b>Google Workspace</b>(Gmail · 드라이브 · 문서), <b>Microsoft 365</b>(Outlook · Teams), <b>GitHub</b>가 기본 제공됩니다.<br>
+            <span style="display:inline-block;margin-top:6px;color:var(--ink-3)">연결하면 <b>"내 드라이브에서 지난달 보고서 찾아서 요약해줘"</b>처럼 부탁할 수 있습니다. 회사 계정이면 <b>관리자가 어떤 연동을 허용할지 정합니다</b> — 목록에 없으면 IT에 문의하세요.</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap lv-12">한국어 공식 문서에 <b>"프로젝트란 무엇인가요?"</b>, <b>"아티팩트란 무엇이며 어떻게 사용하나요?"</b>, <b>"커넥터를 사용하여 Claude의 기능 확장하기"</b> 라는 제목으로 자세한 안내가 있습니다. <b>교육</b> 탭의 링크에서 찾으실 수 있습니다.</p>
+
+    <div class="sh lv-1">
+      <h2>문서 · 엑셀 · PPT 파일로 받기</h2>
+      <p>대화 속 답변으로만 받지 말고 <b>파일로 달라고 하면 됩니다.</b> 따로 설정할 것 없이 부탁하면 만들어 줍니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>내장 스킬</th><th>이런 걸 부탁하면 쓰입니다</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">엑셀</td><td>"이 데이터로 엑셀 파일 만들어줘" — 수식과 서식이 들어간 <b>실제 스프레드시트</b>로 나옵니다.</td></tr>
+          <tr><td class="lab">워드</td><td>"이 내용을 워드 문서로" — 서식이 잡힌 문서 파일로 받습니다.</td></tr>
+          <tr><td class="lab">파워포인트</td><td>"발표 자료 10장으로 만들어줘" — 슬라이드 파일로 나옵니다.</td></tr>
+          <tr><td class="lab">PDF</td><td>PDF 만들기, 그리고 <b>받은 PDF에서 내용 뽑아내기.</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn lv-1">
+      <span class="note-h">"파일이 안 만들어져요"</span>
+      <p>스킬은 <b>코드 실행 기능이 켜져 있어야</b> 동작합니다. 이걸 몰라서 안 되는 경우가 가장 많습니다.</p>
+      <p><b>개인 요금제</b> — 설정 → <b>Capabilities</b>에서 <b>Code execution and file creation</b>을 켜세요. 그다음 <b>Customize → Skills</b>에서 개별 스킬을 켜고 끕니다.</p>
+      <p><b>회사 계정(Team · Enterprise)</b> — 소유자가 <b>조직 설정 → Skills</b>에서 먼저 켜야 구성원이 쓸 수 있습니다. 개인 설정만 뒤져도 답이 안 나오니 <b>IT에 문의</b>하세요.</p>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>Cowork — 맡기는 요령 <span class="lvtag">청소년</span></h2>
+      <p>Chat과 가장 다른 점은 <b>내가 지켜보지 않아도 된다</b>는 것입니다. 대신 맡길 때 정해줘야 할 것이 있습니다.</p>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>먼저 정하세요 — 내 파일이 필요한 일인가.</b><br>
+        필요 없으면 <b>클라우드</b>에서 돌리세요. <b>컴퓨터를 꺼도 계속 진행되고</b> 다른 기기에서 이어볼 수 있습니다.<br>
+        내 파일을 다뤄야 하면 <b>데스크톱 앱을 열어 둔 상태로</b> 돌려야 합니다.</li>
+      <li><b>맡겨놓고 앱을 닫지 마세요.</b> 가장 흔한 실수입니다. 내 파일을 다루는 작업은 <b>앱이 열려 있는 동안만</b> 진행됩니다. 닫으면 멈춥니다.</li>
+      <li><b>작업 폴더는 좁게 주세요.</b> 시작할 때 어느 폴더에서 작업할지 묻습니다. <b>홈 폴더째 열어주지 말고</b> 필요한 폴더만 지정하는 게 안전합니다.</li>
+      <li><b>무엇이 완성인지 적어주세요.</b> 되물을 사람이 없으니 <b>"결과를 어떤 형태로 어디에 남길지"</b>까지 써야 합니다. "정리해줘"가 아니라 "표로 만들어서 이 폴더에 엑셀로 저장해줘".</li>
+      <li><b>처음 며칠은 결과를 직접 확인하세요.</b> 목록에 <b>초록색으로 끝났다고 표시되어도 일이 제대로 됐다는 뜻은 아닙니다.</b> 실행을 열어 내용을 봐야 합니다.</li>
+    </ol>
+    <div class="note lv-2">
+      <span class="note-h">Cowork 쓰기 전 두 가지 설정</span>
+      <p><b>데이터 폴더를 <code>Documents</code> 밖으로 옮기세요.</b> 기본 위치가 Documents 아래여서, 클라우드 동기화 폴더와 겹치면 문제가 생깁니다. <b>설정 → Cowork files</b>에서 바꿉니다.</p>
+      <p><b>용량을 씁니다.</b> Cowork는 별도 공간에서 돌아가서 디스크를 적잖이 씁니다. 부족해지면 <b>Cowork 디스크 공간 확보</b> 기능이 있고, <b>작업 결과물은 지우지 않고</b> 임시 파일만 정리합니다.</p>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>Code — 코드를 몰라도 만들 수 있습니다 <span class="lvtag">청소년</span></h2>
+      <p><b>개발자만 쓰는 곳이 아닙니다.</b> 코드를 한 줄도 못 읽어도, 원하는 걸 말로 설명하면 만들어 줍니다. 핵심은 <b>결과를 눈으로 확인하면서 고쳐나갈 수 있다</b>는 것입니다.</p>
+    </div>
+    <div class="note lv-2">
+      <span class="note-h">비개발자에게 이게 왜 되나</span>
+      <p><b>만든 화면을 바로 띄워서 보여줍니다.</b> 웹페이지를 만들면 Claude가 알아서 서버를 띄우고 앱 안의 브라우저 창에 열어줍니다. 코드를 볼 필요 없이 <b>결과 화면을 보고</b> "이 버튼 색 바꿔줘"라고 하면 됩니다.</p>
+      <p><b>그리고 스스로 확인합니다.</b> 고친 뒤에 <b>직접 스크린샷을 찍고, 버튼을 눌러보고, 입력창을 채워보면서</b> 문제를 찾아 고칩니다. 내가 일일이 테스트하지 않아도 됩니다.</p>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>이런 걸 만듭니다</h2>
+      <p>실제로 비개발자가 많이 만드는 것들입니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>만드는 것</th><th>예</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">한 장짜리 웹페이지</td><td>행사 안내, 제품 소개, 사내 공지 페이지. <b>지금 보고 계신 이 문서도</b> 이렇게 만든 것입니다.</td></tr>
+          <tr><td class="lab">자료를 보여주는 화면</td><td>엑셀 데이터를 <b>표와 차트가 있는 페이지</b>로. 매번 엑셀을 열어 보여주는 것보다 편합니다.</td></tr>
+          <tr><td class="lab">간단한 사내 도구</td><td>계산기, 견적 산출, 체크리스트, 신청 양식처럼 <b>반복 작업을 대신하는 작은 도구.</b></td></tr>
+          <tr><td class="lab">문서 · 매뉴얼 사이트</td><td>여러 페이지를 모아 검색되는 형태로. 팀에 공유하기 좋습니다.</td></tr>
+          <tr><td class="lab">자료 정리 자동화</td><td>파일 이름 바꾸기, 여러 파일 합치기, 형식 변환처럼 <b>손으로 하면 오래 걸리는 정리 작업.</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>처음 시작하는 법</h2>
+      <p>준비물은 <b>빈 폴더 하나</b>입니다.</p>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>빈 폴더를 만드세요.</b> 이름은 아무거나 — 예: <code>행사안내페이지</code>. 여기에 결과물이 쌓입니다.</li>
+      <li><b>Code 탭에서 그 폴더를 엽니다.</b> 처음 열 때 이 폴더에서 작업해도 되냐고 물으니 허용해주세요.</li>
+      <li><b>원하는 걸 말로 설명하세요.</b> 코드 이야기는 할 필요 없습니다.<br>
+        <span style="display:inline-block;margin-top:6px;color:var(--ink-3)">예: <i>"10월 신제품 발표회 안내 페이지를 만들어줘. 일정과 장소, 신청 버튼이 있고, 휴대폰에서도 잘 보여야 해."</i></span></li>
+      <li><b>화면이 떠오르면 보고 말하세요.</b> "제목이 너무 크다", "신청 버튼을 위로", "회사 색인 남색으로". <b>코드가 아니라 보이는 것을 말하면 됩니다.</b></li>
+      <li><b>참고할 이미지를 주면 훨씬 정확합니다.</b> 마음에 드는 다른 사이트 <b>스크린샷을 붙이고</b> "이런 느낌으로"라고 하세요.</li>
+    </ol>
+
+    <div class="sh lv-3">
+      <h2>컨텍스트를 관리하며 오래 가기 <span class="lvtag t3">성인</span></h2>
+      <p>긴 작업에서 품질이 떨어지는 원인은 대개 <b>컨텍스트가 찬 것</b>입니다. 눈에 안 보여서 원인을 엉뚱한 데서 찾게 됩니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>상황</th><th>대처</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">차면 자동으로 요약됩니다</td>
+            <td>Code 탭은 컨텍스트가 차면 <b>대화를 스스로 요약하고 계속 진행</b>합니다. 멈추지는 않지만 <b>앞부분의 세부가 흐려집니다</b> — 초반에 정한 규칙이 뒤에서 지켜지지 않으면 이걸 의심하세요.</td>
+          </tr>
+          <tr>
+            <td class="lab">원하는 시점에 압축하기</td>
+            <td><code>/compact</code>를 쓰면 <b>내가 고른 시점에</b> 요약합니다. 한 단계를 끝낸 직후처럼 <b>버릴 게 명확한 지점</b>에서 하는 게 좋습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">지금 얼마나 찼는지 보기</td>
+            <td>모델 선택기 옆의 <b>사용량 링</b>을 누르면 컨텍스트 사용량과 플랜 사용량이 보입니다. <b>컨텍스트는 세션별</b>이고, <b>플랜 사용량은 모든 표면이 공유</b>합니다 — 다른 창에서 쓴 것도 함께 차오릅니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">대화에 싣지 말 것</td>
+            <td>매번 붙여넣는 <b>지식은 프로젝트로</b>, 반복하는 <b>절차는 스킬로</b> 빼세요. 대화가 가벼워지면 긴 작업이 훨씬 안정적입니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>여러 작업을 동시에 굴리기 <span class="lvtag t3">성인</span></h2>
+      <p>하나 시켜놓고 기다리는 게 가장 큰 낭비입니다. Code 탭은 <b>병렬을 전제로</b> 설계돼 있습니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>방법</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">세션을 여러 개 열기</td>
+            <td>git 저장소라면 <b>각 세션이 프로젝트의 격리된 사본</b>에서 작업합니다. 그래서 <b>한 세션의 변경이 다른 세션에 영향을 주지 않습니다</b> — 같은 파일을 건드리는 작업도 동시에 굴릴 수 있습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">두 세션 나란히 보기</td>
+            <td><span class="os-mac"><kbd>⌘</kbd></span><span class="os-win"><kbd>Ctrl</kbd></span>을 누른 채 사이드바의 세션을 클릭하면 <b>두 번째 창으로</b> 열립니다. 하나로 돌아오려면 <span class="os-mac"><kbd>⌘</kbd><kbd>\</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>\</kbd></span>.</td>
+          </tr>
+          <tr>
+            <td class="lab">자리를 떠야 할 때</td>
+            <td>오래 걸리는 작업은 <b>클라우드로 넘기면</b> 컴퓨터를 꺼도 진행됩니다. 다른 기기에서 이어받을 수도 있습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">끝나면 알림이 옵니다</td>
+            <td>보고 있지 않은 세션이 작업을 마치면 <b>OS 알림</b>이 옵니다. 그래서 여러 개를 굴려도 놓치지 않습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>Cowork의 경계를 설계하기 <span class="lvtag t3">성인</span></h2>
+      <p>Cowork를 오래 쓰면 "무엇을 할 수 있나"보다 <b>"어디까지 닿게 둘 것인가"</b>가 문제가 됩니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>경계</th><th>설계 기준</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">로컬 · 클라우드 분리는 보안 경계다</td>
+            <td>클라우드 세션은 <b>의도적으로 로컬 자원에 닿지 못합니다.</b> 편의가 아니라 격리입니다 — 내 파일이 필요한 작업을 클라우드로 넘기려는 시도는 방향이 틀렸습니다. <b>작업을 쪼개서</b> 로컬이 필요한 부분만 데스크톱에 남기세요.</td>
+          </tr>
+          <tr>
+            <td class="lab">앱이 닫히면 끊기는 것</td>
+            <td><b>로컬 파일 접근 · 브라우저 자동화 · 컴퓨터 사용 · 라이브 아티팩트</b>는 앱이 열려 있는 동안만 동작합니다. 긴 작업을 설계할 때 <b>이 네 가지가 필요한 구간</b>을 미리 갈라두면 중간에 멈추는 일이 없습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">예약 세션은 다른 스킬을 씁니다</td>
+            <td>예약된 Cowork 세션은 내 컴퓨터의 스킬 폴더를 <b>읽지 않습니다.</b> <b>계정에 켜 둔 스킬</b>을 세션 시작 시 동기화해서 씁니다 — 로컬에서만 되던 자동화가 예약으로 돌리면 실패하는 이유가 이것입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">디스크는 계속 늘어납니다</td>
+            <td>가상 머신 기반이라 세션이 쌓입니다. 정리 기능은 <b>실행 중이 아닌 세션의 캐시와 임시 파일만</b> 지우고 <b>작업 공간의 결과물은 건드리지 않습니다</b> — 안심하고 돌려도 됩니다. 데이터 폴더는 <b>동기화 폴더 밖</b>으로 옮겨두세요.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>Claude가 스스로 검증하게 두기 <span class="lvtag t3">성인</span></h2>
+      <p>직접 눌러보고 확인하는 시간이 가장 아깝습니다. Code 탭은 <b>자기가 만든 걸 자기가 확인</b>하도록 설계돼 있습니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>동작</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">고칠 때마다 자동 확인</td>
+            <td>기본 설정에서 <b>수정 직후 스스로 검증합니다.</b> 서버를 띄워 화면을 열고 <b>스크린샷을 찍고, 요소를 살피고, 버튼을 누르고, 입력창을 채워보며</b> 찾은 문제를 고칩니다. 프런트엔드뿐 아니라 <b>백엔드도</b> — API를 호출하고 서버 로그를 읽습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">권한 확인 없이 돕니다</td>
+            <td>내 <b>로컬 개발 서버와 프로젝트 파일</b>은 승인이 필요 없어서 자동 검증이 끊기지 않습니다. 반면 <b>외부 사이트</b>에 작용할 때는 안전 검사가 붙고, Auto·Bypass 외의 모드에서는 <b>도메인 허용 확인</b>까지 거칩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">우리 프로젝트 방식에 맞추기</td>
+            <td>서버 실행 명령이 특이하면 <code>.claude/launch.json</code>을 프로젝트 방식에 맞게 고치면 됩니다. 그러면 매번 설명하지 않아도 알아서 띄웁니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">로그인 상태는 분리돼 있습니다</td>
+            <td>앱 안 브라우저는 <b>내 개인 브라우저와 분리된 깨끗한 프로필</b>입니다 — 저장된 로그인이 없습니다. 내 계정으로 동작해야 하는 일이라면 이 창이 아니라 <b>Chrome 확장</b>을 써야 합니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>비개발자를 위한 요령 <span class="lvtag">청소년</span></h2>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>큰 것은 "계획부터" 시키세요.</b> <span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>M</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>M</kbd></span>에서 <b>계획 모드</b>를 고르면 실제로 만들기 전에 <b>어떻게 만들지 먼저 설명</b>해 줍니다. 방향이 맞는지 확인한 뒤 진행하면 헛수고를 줄입니다.</li>
+      <li><b>작게 시작해서 늘리세요.</b> 처음부터 완성본을 요구하지 말고, <b>한 화면을 만들고 → 확인하고 → 다음을 붙이는</b> 식이 훨씬 빠릅니다.</li>
+      <li><b>모르는 말이 나오면 물어보세요.</b> "그게 무슨 뜻이야?"라고 하면 설명해 줍니다. 용어를 몰라도 진행할 수 있습니다.</li>
+      <li><b>잘 되던 상태를 저장해두세요.</b> "지금 상태 저장해줘"라고 하면 되돌릴 지점을 만들어 줍니다. 뭔가 망가졌을 때 <b>"아까 잘 되던 상태로 돌려줘"</b>라고 하면 됩니다.</li>
+      <li><b>만든 것을 남에게 보여주려면</b> 그냥 부탁하세요 — 파일로 뽑아 전달하거나, 공유 가능한 링크로 만드는 방법을 안내해 줍니다.</li>
+    </ol>
+    <div class="note warn os-win lv-2">
+      <span class="note-h">Windows는 시작 전에 하나 설치해야 합니다</span>
+      <p>Windows에서 Code 탭을 처음 열면 <b>"Git is required"</b>라는 메시지가 나올 수 있습니다. <b>Git for Windows</b>를 설치하고 앱을 다시 시작하면 됩니다. Mac은 대부분 이미 들어 있어서 그냥 됩니다.</p>
+      <p>설치가 막히면 IT 담당자에게 <b>"Git for Windows 설치"</b>라고 요청하시면 됩니다.</p>
+    </div>
+
+  </section>
+
+  <!-- ================= PANEL 3 :: 스킬 ================= -->
+  <section class="panel" role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden>
+
+    <div class="note lv-2">
+      <span class="note-h">스킬이 뭔가요</span>
+      <p><b>같은 지시를 반복해서 붙여넣고 있다면</b> 그게 스킬로 만들 후보입니다. 그 지시를 한 번 저장해두면, 관련된 일을 부탁할 때 <b>알아서 꺼내 쓰거나</b> 이름으로 직접 불러올 수 있습니다.</p>
+      <p>예를 들어 "우리 회사 보도자료 형식", "고객 문의 답변 톤", "주간 보고 양식" 같은 것들. <b>매번 설명하지 않아도 됩니다.</b></p>
+    </div>
+
+
+    <div class="sh lv-2">
+      <h2>내 스킬 만들기 <span class="lvtag">청소년</span></h2>
+      <p>어렵지 않습니다. <b>지시문을 적은 파일 하나</b>를 압축해서 올리면 끝입니다.</p>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>폴더를 하나 만들고</b> 이름을 정합니다. 예: <code>보도자료-형식</code></li>
+      <li>그 안에 <b><code>SKILL.md</code>라는 이름의 텍스트 파일</b>을 만듭니다. 파일 이름은 정확히 이래야 합니다.</li>
+      <li><b>맨 위에 이름과 설명을, 아래에 지시 내용을</b> 씁니다. 아래 예시를 그대로 복사해 고쳐 쓰세요.</li>
+      <li><b>폴더를 ZIP으로 압축</b>합니다.</li>
+      <li><b>Customize → Skills → <code>+</code> → Upload a skill</b>에서 ZIP을 올립니다. 목록에 나타나면 켜고 끌 수 있습니다.</li>
+    </ol>
+    <pre class="lv-2"><code><span class="fm">---
+name: 보도자료-형식
+description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
+  보도자료, 프레스 릴리스, 언론 배포용 글을 요청할 때 사용.
+---</span>
+
+보도자료를 작성할 때 다음을 따른다.
+
+- 첫 문단에 핵심 내용을 한 문장으로 넣는다
+- 회사 소개는 맨 마지막 문단에 넣는다
+- 과장된 표현("혁신적", "최고의")은 쓰지 않는다
+- 인용문은 실명과 직책을 함께 적는다
+- 분량은 A4 한 장을 넘기지 않는다</code></pre>
+    <p class="cap lv-2"><code>---</code> 사이가 <b>이름과 설명</b>, 그 아래가 <b>실제 지시</b>입니다. 설명은 Claude가 "언제 이 스킬을 쓸지" 판단하는 기준이 되니 중요합니다.</p>
+
+    <div class="sh lv-2">
+      <h2>잘 쓰는 요령 <span class="lvtag">청소년</span></h2>
+      <p>스킬이 안 먹히는 이유는 거의 <b>설명</b>과 <b>길이</b> 두 가지입니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>증상</th><th>원인과 해결</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">써야 할 때 안 쓴다</td>
+            <td>설명에 <b>내가 실제로 입에 올릴 단어</b>가 없어서입니다. 기능 이름이 아니라 <b>부탁할 때 쓸 표현</b>을 넣으세요 — "보도자료", "프레스 릴리스", "언론 배포용"처럼 여러 가지로.<br><span style="display:inline-block;margin-top:6px">확인하는 법 — Claude에게 <b>"사용 가능한 스킬이 뭐야?"</b>라고 물어보면 목록이 나옵니다.</span></td>
+          </tr>
+          <tr>
+            <td class="lab">안 써야 할 때 쓴다</td>
+            <td>설명이 너무 넓습니다. <b>더 좁고 구체적으로</b> 고치세요.</td>
+          </tr>
+          <tr>
+            <td class="lab">가끔 무시된다</td>
+            <td>스킬이 많아지면 설명이 잘려서 판단 근거가 사라집니다. <b>핵심 용도를 설명 맨 앞에</b> 쓰세요 — <b>뒤쪽이 먼저 잘려 나갑니다.</b></td>
+          </tr>
+          <tr>
+            <td class="lab">이상하게 느려진다</td>
+            <td><b>지시 내용을 짧게 쓰세요.</b> 스킬은 한 번 불려오면 이후 대화에도 계속 남아 있어서, 긴 내용은 계속 부담이 됩니다. <b>왜 그런지 설명하지 말고 무엇을 할지만</b> 적으세요.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note lv-2">
+      <span class="note-h">두 종류로 나눠 생각하면 쉽습니다</span>
+      <p><b>형식 · 규칙형</b> — 문서 양식, 말투, 우리 회사 용어. Claude가 알아서 참고하게 두면 됩니다. <b>설명을 잘 쓰는 게 전부입니다.</b></p>
+      <p><b>절차형</b> — 순서가 정해진 작업. 이건 내가 부를 때만 돌아야 하니, <b>이름으로 직접 불러</b> 쓰세요.</p>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>무엇을 스킬로 만들지 <span class="lvtag">청소년</span></h2>
+      <p>스킬을 만들기 시작하면 <b>아무거나 만들게</b> 됩니다. 만들 가치가 있는지 먼저 걸러야 관리가 됩니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>판단</th><th>기준</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">만들 만하다</td><td><b>세 번 이상 같은 지시를 붙여넣었다.</b> 그리고 그 지시가 <b>거의 안 바뀐다.</b> 회사 문서 양식, 응대 톤, 검토 기준처럼요.</td></tr>
+          <tr><td class="lab">아직 아니다</td><td>매번 조건이 달라지는 일. 스킬로 굳히면 <b>맞지 않는 상황에도 끌려갑니다.</b> 이럴 땐 프로젝트에 <b>참고 자료로</b> 두는 편이 낫습니다.</td></tr>
+          <tr><td class="lab">스킬 대신 프로젝트</td><td>필요한 게 <b>지시</b>가 아니라 <b>자료</b>라면 프로젝트에 올리세요. "이 자료를 참고해라"는 스킬로 만들 게 아닙니다.</td></tr>
+          <tr><td class="lab">스킬 대신 예약 작업</td><td>지시가 아니라 <b>시점</b>이 문제라면 자동화입니다. "매주 월요일"이 핵심이면 스킬이 아니라 예약 작업입니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>팀에 공유하기 <span class="lvtag">청소년</span></h2>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>올린 스킬은 기본적으로 나만 씁니다.</b> 공유하려면 회사 계정(Team · Enterprise)이어야 합니다.</li>
+      <li><b>소유자가 조직 설정 → Skills에서 공유를 켜야</b> 구성원이 공유할 수 있습니다.</li>
+      <li>켜지면 <b>특정 사람 · 그룹 · 조직 전체</b>로 범위를 골라 공유합니다.</li>
+      <li><b>받은 사람은 내용을 고칠 수 없습니다.</b> 켜서 쓰기만 가능합니다. 수정이 필요하면 만든 사람에게 요청해야 합니다.</li>
+    </ol>
+
+    <div class="sh lv-3">
+      <h2>스킬이 많아지면 <span class="lvtag t3">성인</span></h2>
+      <p>스킬이 쌓이면 <b>설명이 잘려서</b> 판단 근거가 사라집니다. 원리를 알아야 대처됩니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>항목</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">설명 길이 상한</td>
+            <td>스킬 하나의 설명은 <b>1,536자</b>까지만 반영됩니다. 넘으면 <b>뒤쪽이 잘립니다</b> — 그래서 <b>핵심 용도를 맨 앞에</b> 써야 합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">목록 전체 예산</td>
+            <td>사용 가능한 스킬 목록은 <b>컨텍스트의 약 1%</b>를 배정받습니다. 넘치면 설명이 줄어드는데, <b>자주 쓰는 스킬의 설명이 우선 보존</b>되고 안 쓰는 것부터 잘립니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">본문은 계속 남습니다</td>
+            <td>스킬이 한 번 불려오면 <b>이후 턴에도 컨텍스트에 남습니다.</b> 긴 본문은 대화 내내 반복 비용이 됩니다 — <b>이유를 설명하지 말고 지시만</b> 쓰세요.</td>
+          </tr>
+          <tr>
+            <td class="lab">점검하는 법</td>
+            <td>Claude Code에서 <code>/doctor</code>를 실행하면 <b>목록이 차지하는 컨텍스트 비용</b>과 가장 큰 기여자를 알려줍니다. <code>/context</code>의 Skills 항목에서도 실제 반영된 크기를 볼 수 있습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>Code 탭에서도 쓰려면 <span class="lvtag t3">성인</span></h2>
+      <p>Code 탭으로 웹페이지나 도구를 만드실 때도 스킬을 쓸 수 있습니다. 다만 <b>넣는 위치가 다릅니다.</b></p>
+    </div>
+    <div class="note warn lv-3">
+      <span class="note-h">Code 탭과 앱은 스킬을 다른 데서 읽습니다</span>
+      <p><b>Chat과 Cowork</b>는 위에서 올린 <b>계정에 등록된 스킬</b>을 씁니다. <b>Code 탭</b>은 내 컴퓨터의 <code>~/.claude/skills/</code> 폴더에 있는 파일을 읽습니다. <b>같은 계정이어도 서로 안 보입니다.</b></p>
+      <p>그리고 <b>규격이 다릅니다.</b> Code 탭용으로 만든 스킬을 앱에 올리면 <b>오류로 실패합니다</b> — 앱 업로드는 맨 위 항목을 여섯 개(<code>name</code>, <code>description</code>, <code>license</code>, <code>compatibility</code>, <code>metadata</code>, <code>allowed-tools</code>)만 허용합니다.</p>
+      <p><b>둘 다 쓸 스킬이라면</b> 처음부터 <code>name</code>과 <code>description</code>만 쓰세요. 위의 예시가 그렇게 되어 있어서 양쪽 모두에서 동작합니다.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 4 :: 업무 자동화 ================= -->
+  <section class="panel" role="tabpanel" id="p4" aria-labelledby="t4" tabindex="0" hidden>
+
+    <div class="note lv-2">
+      <span class="note-h">자동화라고 어렵게 생각하지 마세요</span>
+      <p><b>"매주 월요일 아침에 이거 해줘"</b>를 저장해두는 것입니다. 시간이 되면 알아서 시작하고, 결과를 알림으로 알려줍니다.</p>
+      <p>만드는 방법도 어렵지 않습니다 — <b>말로 부탁하면 됩니다.</b></p>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>가장 쉬운 방법 — 말로 부탁하기 <span class="lvtag">청소년</span></h2>
+      <p>메뉴를 찾을 필요 없습니다. 아무 대화창에서 이렇게 말하면 됩니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>이렇게 말하면</th><th>이렇게 됩니다</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">"매일 아침 9시에 어제 받은 메일 요약해줘"</td><td><b>반복 작업</b>이 만들어집니다. 매일 그 시간에 알아서 시작합니다.</td></tr>
+          <tr><td class="lab">"내일 오후 3시에 계약서 검토하라고 알려줘"</td><td><b>한 번만 실행</b>되는 작업이 만들어지고, 실행 후 스스로 꺼집니다.</td></tr>
+          <tr><td class="lab">"6시간마다 이 폴더 정리해줘"</td><td>메뉴에 없는 주기도 <b>말로 하면 됩니다.</b></td></tr>
+          <tr><td class="lab">"내 예약 작업 보여줘" · "그거 잠시 멈춰줘"</td><td>관리도 말로 됩니다. 목록 확인, 일시 중지, 수정 전부.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap lv-2">직접 만들려면 사이드바의 <b>Routines</b> → <b>New routine</b>. 이름 · 설명 · 지시문 · 일정을 채우면 되고, 일정은 <b>매시간 · 매일 · 평일만 · 매주</b> 중에서 고릅니다.</p>
+
+    <div class="sh">
+      <h2>두 가지 중 어디서 돌릴지</h2>
+      <p>만들 때 이것만 정하면 됩니다. <b>잘못 고르면 "왜 안 돌았지"를 반복합니다.</b></p>
+    </div>
+    <div class="tw">
+      <table class="duo">
+        <thead><tr><th></th><th class="hl">클라우드에서</th><th class="hl">내 컴퓨터에서</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">컴퓨터를 꺼도 되나</td><td data-l="클라우드에서"><b>됩니다</b> — 노트북을 닫아도 돌아갑니다</td><td class="sep" data-l="내 컴퓨터에서">안 됩니다 — 켜져 있고 <b>앱도 열려</b> 있어야 합니다</td></tr>
+          <tr><td class="lab">내 컴퓨터 파일을 다루나</td><td data-l="클라우드에서">못 다룹니다</td><td class="sep" data-l="내 컴퓨터에서"><b>다룹니다</b></td></tr>
+          <tr><td class="lab">최소 주기</td><td data-l="클라우드에서">1시간</td><td class="sep" data-l="내 컴퓨터에서">1분</td></tr>
+          <tr><td class="lab">이럴 때</td><td data-l="클라우드에서">메일 · 메신저 · 웹 자료처럼 <b>내 컴퓨터 밖의 일</b></td><td class="sep" data-l="내 컴퓨터에서">내 폴더의 <b>파일을 만들고 정리하는 일</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap">직접 만들 때는 <b>New routine</b>에서 <b>Cloud</b>(클라우드) 또는 <b>Local</b>(내 컴퓨터)을 고릅니다.</p>
+
+    <div class="sh lv-2">
+      <h2>이런 걸 맡깁니다</h2>
+      <p>공통점은 <b>반복되고, 사람이 안 봐도 되고, 결과물이 분명하다</b>는 것입니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>예시</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">스스로 준비되는 주간 회의</td><td>매주 정해진 시간에 지난주 자료를 모아 <b>회의 자료 초안</b>을 만들어둡니다. 회의 준비에 쓰던 시간이 줄어듭니다. <span class="lvl">공식 가이드 있음</span></td></tr>
+          <tr><td class="lab">아침 브리핑</td><td>출근 전에 <b>일정과 받은 메일</b>을 훑어 그날 챙길 것을 정리해둡니다.</td></tr>
+          <tr><td class="lab">밀린 목록 정리</td><td>평일 밤마다 새로 들어온 문의나 이슈를 <b>분류하고 담당을 배정</b>한 뒤 메신저에 요약을 올립니다. 아침에 정리된 상태로 시작합니다.</td></tr>
+          <tr><td class="lab">자료 변화 추적</td><td>주기적으로 바뀐 내용을 찾아 <b>업데이트가 필요한 문서</b>를 알려줍니다.</td></tr>
+          <tr><td class="lab">코드 리뷰 <span class="tag t-info">개발</span></td><td>새 코드 변경이 올라오면 <b>팀 기준으로 검토</b>해 의견을 남깁니다. 사람은 기계적 점검 대신 설계를 봅니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh">
+      <h2>안 돌았을 때 — 원인은 대개 이 넷</h2>
+      <p>고장이 아닙니다. 순서대로 확인하세요.</p>
+    </div>
+    <div class="tw">
+      <table class="duo">
+        <thead><tr><th>증상</th><th>원인과 해결</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">그냥 안 돌았다</td>
+            <td><b>노트북이 자고 있었을 겁니다.</b> 내 컴퓨터에서 돌리는 작업은 컴퓨터가 깨어 있고 앱이 열려 있어야 합니다.<br>
+            <span style="display:inline-block;margin-top:6px">설정 → <b>데스크톱 앱 → 일반</b>의 <b>컴퓨터 깨어 있게 유지</b>를 켜세요. 단 <b>덮개를 닫으면 그래도 잠듭니다.</b> 꼭 돌아야 하는 일은 <b>클라우드</b>로 옮기세요.</span></td>
+          </tr>
+          <tr>
+            <td class="lab">엉뚱한 시간에 돌았다</td>
+            <td>컴퓨터가 깨어나면 <b>놓친 실행을 한 번 뒤늦게</b> 돌립니다. 그래서 <b>아침 9시 작업이 밤 11시에 돌 수 있습니다.</b><br>
+            <span style="display:inline-block;margin-top:6px">→ 지시문 안에 조건을 넣으세요. 예: <i>"오후 5시 이후면 그냥 놓친 내용 요약만 남겨라."</i></span></td>
+          </tr>
+          <tr>
+            <td class="lab">시작만 하고 멈춰 있다</td>
+            <td><b>허락을 기다리는 중</b>입니다. 만든 직후 <b>Run now</b>로 한 번 돌려보고, 확인 창이 뜰 때마다 <b>"항상 허용"</b>을 눌러두면 이후로는 자동으로 진행됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">초록색인데 결과가 없다</td>
+            <td><b>초록색은 "오류 없이 끝났다"는 뜻일 뿐, 일이 됐다는 뜻이 아닙니다.</b> 실행을 열어 내용을 읽어야 실제로 뭘 했는지 보입니다. <b>처음 며칠은 꼭 확인하세요.</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>일정 말고 다른 방식으로 실행하기 <span class="lvtag t3">성인</span></h2>
+      <p>클라우드 루틴은 시간 말고도 <b>두 가지 방식</b>으로 시작할 수 있습니다. 사내 시스템과 엮을 때 씁니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>트리거</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">API 호출</td>
+            <td>루틴마다 <b>전용 주소</b>가 생기고, 거기에 <b>HTTP POST</b>를 보내면 실행됩니다. 모니터링 도구, 배포 파이프라인, 사내 도구에서 부를 수 있습니다.<br>
+            <span style="display:inline-block;margin-top:6px;color:var(--ink-3)">토큰은 <b>생성 시 한 번만</b> 표시되니 바로 보관하세요. 넘긴 텍스트(알림 본문 등)는 <b>신뢰할 수 없는 데이터로 표시되어</b> 도착하므로, 그것을 쓰겠다고 <b>지시문에 명시해야</b> 반영됩니다.</span></td>
+          </tr>
+          <tr>
+            <td class="lab">GitHub 이벤트</td>
+            <td><b>Pull request</b>와 <b>Release</b> 이벤트에 반응합니다. 작성자 · 제목 · 대상 브랜치 · 라벨 · 초안 여부 · 머지 여부로 필터를 걸 수 있습니다. Claude GitHub App 설치가 필요합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">커스텀 주기</td>
+            <td>기본 제공 주기(매시간 · 매일 · 평일 · 매주) 밖의 간격은 <code>/schedule update</code>로 <b>cron 식</b>을 지정합니다. <b>최소 간격은 1시간</b>이고 그보다 짧으면 거부됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">여러 트리거 조합</td>
+            <td>한 루틴에 <b>여러 개를 동시에</b> 붙일 수 있습니다 — 매일 밤 돌리면서, 배포 스크립트에서도 부르고, 새 PR마다 반응하게.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>회사가 정해두는 것들 <span class="lvtag t3">성인</span></h2>
+      <p>"내 화면엔 그 기능이 없다"의 원인은 대개 여기입니다. <b>관리자가 정책으로 내려보내는 항목</b>이라 사용자가 풀 수 없습니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>정책</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">작업 허용 폴더</td><td>Claude가 손댈 수 있는 폴더를 제한합니다. <b>Cowork와 Code 양쪽에 함께 적용</b>됩니다. 설정하지 않으면 제한이 없습니다.</td></tr>
+          <tr><td class="lab">도구 접근 호스트</td><td>Cowork 작업과 Code 세션에서 <b>도구가 접근할 수 있는 주소</b>를 제한합니다. 방화벽에 열어줄 대상과 짝이 되는 항목입니다.</td></tr>
+          <tr><td class="lab">Auto 모드 제공 여부</td><td>권한 선택기에 <b>Auto</b>(어떤 동작에 승인이 필요한지 Claude가 판단)를 노출할지 결정합니다.</td></tr>
+          <tr><td class="lab">내장 도구 제한</td><td>Cowork에서 특정 도구를 <b>제거</b>하거나, 도구별로 <b>호출마다 승인</b>을 요구하게 할 수 있습니다.</td></tr>
+          <tr><td class="lab">Code · 루틴 끄기</td><td>조직 단위로 <b>Code 탭</b>이나 <b>예약 루틴</b>을 아예 끌 수 있습니다. 껐을 경우 기존 루틴도 멈춥니다.</td></tr>
+          <tr class="os-win"><td class="lab">WSL 안의 Code 차단</td><td>Windows 전용. 이유가 명시돼 있습니다 — <b>"Windows 엔드포인트 정책은 WSL 내부에 미치지 않습니다."</b> WSL에서 돌리면 회사 보안이 <b>적용되지 않은 상태로</b> 작업하게 됩니다.</td></tr>
+          <tr><td class="lab">정책이 오는 경로</td><td class="os-mac">Mac은 <b>MDM 프로파일</b>로 배포됩니다.</td><td class="os-win">Windows는 <b>그룹 정책(레지스트리)</b>으로 배포됩니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>지시문 쓰는 요령 <span class="lvtag">청소년</span></h2>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>되물을 사람이 없다는 걸 전제로 쓰세요.</b> 대화형 프롬프트와 다릅니다. 애매한 부분이 있으면 그냥 애매하게 처리됩니다.</li>
+      <li><b>무엇이 완성인지 적으세요.</b> "정리해줘"가 아니라 <b>"표로 만들어 이 폴더에 엑셀로 저장하고, 이상한 값은 따로 표시해줘"</b>.</li>
+      <li><b>시간 조건을 넣으세요.</b> 늦게 돌 수 있으니 <b>"오늘 것만", "5시 이후면 건너뛰고"</b>처럼 안전장치를 두세요.</li>
+      <li><b>작게 시작해서 늘리세요.</b> 처음부터 복잡한 걸 맡기지 말고, 하나가 며칠 잘 도는 걸 확인한 뒤 넓히는 편이 빠릅니다.</li>
+    </ol>
+
+    <div class="note warn">
+      <span class="note-h">팀에서 쓸 때 꼭 알아야 할 것</span>
+      <p><b>클라우드 작업은 개인 계정에 속합니다.</b> 동료와 공유되지 않고, 내 계정의 일일 실행 횟수를 씁니다.</p>
+      <p>그리고 <b>작업이 한 일은 전부 "내가 한 것"으로 기록됩니다.</b> 메신저 메시지나 문서 수정이 내 이름으로 남습니다. <b>팀 공용 자동화를 개인 작업으로 돌리면 책임이 한 사람에게 몰립니다</b> — 시작 전에 정하고 가세요.</p>
+      <p>회사 계정이면 관리자가 이 기능을 <b>끌 수 있습니다.</b> 껐을 경우 기존 작업도 멈춥니다.</p>
+    </div>
+  </section>
+
+  <!-- ================= PANEL 5 :: 단축키 ================= -->
+  <section class="panel" role="tabpanel" id="p5" aria-labelledby="t5" tabindex="0" hidden>
+    <div class="note lv-1">
+      <span class="note-h">읽는 법</span>
+      <p class="os-mac">지금 <b>Mac</b> 기준으로 보고 있습니다. <kbd>⌘</kbd>는 Command, <kbd>⌥</kbd>는 Option, <kbd>⇧</kbd>는 Shift입니다.</p>
+      <p class="os-win">지금 <b>Windows</b> 기준으로 보고 있습니다. <kbd>Shift</kbd>는 그대로, Mac의 <kbd>⌘</kbd> 자리에는 <kbd>Ctrl</kbd>이 들어갑니다.</p>
+      <p>위에서부터 읽으시면 됩니다. 다른 컴퓨터를 쓰시면 <b>맨 위의 스위치</b>를 바꾸세요.</p>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>먼저 이 세 개</h2>
+      <p>이 셋이 실제로 시간을 가장 많이 아껴줍니다.</p>
+    </div>
+    <div class="cards three lv-1">
+      <div class="card">
+        <span class="card-p">새 대화</span>
+        <p class="card-one"><span class="os-mac"><kbd>⌘</kbd><kbd>N</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>N</kbd></span></p>
+        <div class="card-rule"></div>
+        <dl><dd><b>주제가 바뀌면 새 대화로.</b> 이유는 <b>잘 쓰는 법</b> 탭에.</dd></dl>
+      </div>
+      <div class="card">
+        <span class="card-p">찾기</span>
+        <p class="card-one"><span class="os-mac"><kbd>⌘</kbd><kbd>F</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>F</kbd></span></p>
+        <div class="card-rule"></div>
+        <dl><dd><b>긴 대화에서 스크롤하지 마세요.</b> 아까 받은 내용을 다시 찾을 때 이게 제일 빠릅니다.</dd></dl>
+      </div>
+      <div class="card">
+        <span class="card-p">멈추기</span>
+        <p class="card-one"><kbd>Esc</kbd></p>
+        <div class="card-rule"></div>
+        <dl><dd><b>엉뚱한 방향으로 갈 때.</b> 끝까지 기다리지 말고 바로 멈추고 다시 시키면 됩니다.</dd></dl>
+      </div>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>손이 빨라지는 것들</h2>
+      <p>단축키를 외우는 것보다 이쪽이 체감이 큽니다. <b>두 컴퓨터 모두 같습니다.</b></p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>이렇게 하면</th><th>이런 게 됩니다</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">파일을 끌어다 놓기</td>
+            <td>문서 · 엑셀 · PDF · 이미지를 <b>입력창에 그냥 떨어뜨리면</b> 됩니다. 내용을 복사해 붙일 필요가 없습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">스크린샷 붙이기</td>
+            <td>화면을 말로 설명하는 것보다 <b>이미지 한 장이 훨씬 정확합니다.</b> 찍어서 붙이고 "여기 뭐가 잘못됐어?"라고 물어보세요.<br>
+            <span class="os-mac" style="display:inline-block;margin-top:6px;color:var(--ink-3)">Mac에서 화면을 클립보드로 바로 복사 — <kbd>⌘</kbd><kbd>⌃</kbd><kbd>⇧</kbd><kbd>4</kbd></span>
+            <span class="os-win" style="display:inline-block;margin-top:6px;color:var(--ink-3)">Windows에서 화면 일부를 복사 — <kbd>Win</kbd><kbd>Shift</kbd><kbd>S</kbd></span></td>
+          </tr>
+          <tr>
+            <td class="lab">입력창 맨 앞에 <kbd>/</kbd></td>
+            <td>쓸 수 있는 기능 목록이 뜹니다. 입력창 옆 <code>+</code> 버튼과 같은 메뉴로, <b>스킬 · 연동 도구 · 파일 첨부</b>가 여기 있습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">멈추지 않고 고치기</td>
+            <td>작업 중에 굳이 <kbd>Esc</kbd>로 세울 필요 없습니다. <b>수정할 내용을 입력하고 <kbd>Enter</kbd></b>만 누르면, 지금 하던 걸 끝낸 뒤 읽고 방향을 바꿉니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">답변만 쏙 복사</td>
+            <td>마우스로 드래그하지 말고 <b>답변 아래 복사 버튼</b>을 쓰세요. 코드나 표가 형식 그대로 복사됩니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="os-mac lv-1">
+      <div class="sh">
+        <h2>Mac에만 있는 두 가지 <span class="tag t-ok">추천</span></h2>
+        <p><b>체감이 가장 큰 기능들</b>입니다. 켜는 곳은 둘 다 <b>설정 → 일반</b>(데스크톱 앱 항목 아래).</p>
+      </div>
+      <div class="tw">
+        <table class="duo">
+          <thead><tr><th>기능</th><th>키</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="lab">어디서든 바로 질문</td>
+              <td class="key" data-l="키"><kbd>Option</kbd> 두 번</td>
+              <td class="sep" data-l="내용">어느 앱에서 일하고 있든 <kbd>Option</kbd>을 <b>두 번 톡톡</b> 누르면 입력창이 떠서, 타이핑하면 새 대화가 시작됩니다. <b>브라우저를 열고 Claude를 찾아 들어가는 과정이 사라집니다.</b> 질문하는 문턱이 낮아지면 쓰는 양이 확 달라집니다. macOS 12 이상.</td>
+            </tr>
+            <tr>
+              <td class="lab">말로 입력하기</td>
+              <td class="key" data-l="키"><kbd>Caps Lock</kbd></td>
+              <td class="sep" data-l="내용">누르면 <b>말하는 대로 글자가 들어갑니다.</b> 다시 누르면 종료. 긴 요청을 타이핑하기 귀찮을 때 특히 좋습니다. 다만 <b><kbd>Caps Lock</kbd> 키를 가져가므로</b>, 대소문자 전환을 쓰신다면 다른 키로 바꾸거나 끄세요. macOS 14 이상.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="os-win lv-1">
+      <div class="sh">
+        <h2>Windows에서 알아둘 것</h2>
+        <p>Mac에만 있는 기능이 두 가지 있어서, 동료가 이야기할 때 헷갈리지 않도록 적어둡니다.</p>
+      </div>
+      <div class="tw">
+        <table class="duo">
+          <thead><tr><th>Mac에만 있는 것</th><th>Windows에서는</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="lab">어디서든 <kbd>Option</kbd> 두 번으로 입력창 띄우기</td>
+              <td><b>없습니다.</b> 대신 <b>Claude 창을 앞으로 불러오는 단축키</b>는 만들 수 있습니다 — 설정 파일 한 줄이라 <b>IT 담당자에게 부탁</b>하시면 됩니다. 새 입력창이 뜨는 게 아니라 앱 창이 올라오는 방식입니다.</td>
+            </tr>
+            <tr>
+              <td class="lab"><kbd>Caps Lock</kbd>으로 말해서 입력하기</td>
+              <td><b>없습니다.</b> 다만 앱의 <b>음성 모드</b>는 쓸 수 있으니, 말로 입력하고 싶으면 그쪽을 확인해 보세요.</td>
+            </tr>
+            <tr>
+              <td class="lab"><span class="dash">—</span></td>
+              <td>화면에 <kbd>⌘</kbd>(Mac 기호)가 보이면 <b><kbd>Ctrl</kbd>로 읽으세요.</b> 표시가 잘못 나오는 문제가 보고된 적이 있습니다.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>흐름을 끊지 않고 곁가지 질문하기 <span class="lvtag">청소년</span></h2>
+      <p>알아두면 유용한데 대부분이 모르는 기능입니다.</p>
+    </div>
+    <div class="note lv-2">
+      <span class="note-h os-mac">⌘ 세미콜론</span>
+      <span class="note-h os-win">Ctrl 세미콜론</span>
+      <p>지금 대화의 맥락은 그대로 읽으면서, <b>본 대화에는 아무것도 남기지 않는</b> 별도 질문창이 열립니다. <span class="os-mac"><kbd>⌘</kbd><kbd>;</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>;</kbd></span></p>
+      <p>예를 들어 보고서를 쓰는 중에 "그런데 이 용어가 정확히 무슨 뜻이야?"를 물어보고 싶을 때. 본 대화에 물어보면 <b>그 이야기에 끌려가</b> 보고서 작업이 흐트러집니다. 여기서 물어보면 안 그렇습니다.</p>
+      <p>입력창에 <code>/btw</code>를 쳐도 같습니다.</p>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>자주 쓰는 기본</h2>
+      <p>다른 앱과 똑같습니다. 훑어만 보세요.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>동작</th><th>키</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">복사 · 붙여넣기</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>C</kbd> <span class="dash">/</span> <kbd>⌘</kbd><kbd>V</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>C</kbd> <span class="dash">/</span> <kbd>Ctrl</kbd><kbd>V</kbd></span></td></tr>
+          <tr><td class="lab">실행 취소</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>Z</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Z</kbd></span></td></tr>
+          <tr><td class="lab">찾은 것 중 다음 · 이전</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>G</kbd> <span class="dash">/</span> <kbd>⌘</kbd><kbd>⇧</kbd><kbd>G</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>G</kbd> <span class="dash">/</span> <kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>G</kbd></span></td></tr>
+          <tr><td class="lab">글씨 크게 · 작게</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>+</kbd> <span class="dash">/</span> <kbd>⌘</kbd><kbd>-</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>+</kbd> <span class="dash">/</span> <kbd>Ctrl</kbd><kbd>-</kbd></span></td></tr>
+          <tr><td class="lab">원래 크기로</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>0</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>0</kbd></span></td></tr>
+          <tr><td class="lab">설정 열기</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>,</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>,</kbd></span></td></tr>
+          <tr><td class="lab">화면이 이상할 때 새로 고침</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>R</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>R</kbd></span></td></tr>
+          <tr><td class="lab">창 닫기 · 앱 종료</td><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>W</kbd> <span class="dash">/</span> <kbd>⌘</kbd><kbd>Q</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>W</kbd> <span class="dash">/</span> <kbd>Ctrl</kbd><kbd>Q</kbd></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>세션을 여러 개 다룰 때 <span class="lvtag t3">성인</span></h2>
+      <p>병렬로 굴리기 시작하면 이 네 개가 손에 붙습니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>키</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td class="key"><kbd>Ctrl</kbd><kbd>Tab</kbd> <span class="dash">/</span> <kbd>Ctrl</kbd><kbd>⇧</kbd><kbd>Tab</kbd></td><td>다음 · 이전 세션. <span class="os-mac">Mac에서도 <kbd>Ctrl</kbd>입니다.</span></td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd></span><span class="os-win"><kbd>Ctrl</kbd></span> + 사이드바 클릭</td><td><b>두 세션을 나란히</b> 엽니다. 하나는 돌려두고 다른 하나를 보는 데 씁니다.</td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>\</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>\</kbd></span></td><td>focus된 창을 닫고 <b>하나로 돌아옵니다.</b></td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>W</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>W</kbd></span></td><td>세션 닫기. 창 닫기와 같은 키라 <b>헷갈리기 쉽습니다</b> — Code 탭에서는 세션이 닫힙니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>Code 탭 — 이 다섯 개면 충분 <span class="lvtag">청소년</span></h2>
+      <p>웹페이지나 도구를 만들 때 쓰는 화면입니다. <b>외울 필요는 없습니다</b> — <span class="os-mac"><kbd>⌘</kbd><kbd>/</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>/</kbd></span> 하나만 기억하면 나머지가 화면에 다 뜹니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>키</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>/</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>/</kbd></span></td><td><b>단축키 전체 보기.</b> 나머지를 다 잊어도 됩니다.</td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>D</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>D</kbd></span></td><td><b>고친 부분 보기.</b> 무엇이 어떻게 바뀌었는지 나란히 보여줍니다. 코드를 몰라도 <b>줄을 클릭해 "여기 이렇게 바꿔줘"</b>라고 메모를 남길 수 있습니다.</td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>B</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>B</kbd></span></td><td><b>만든 화면 보기.</b> 웹페이지를 만들면 여기에 띄워줍니다. <b>보면서 "이거 바꿔줘"라고 하면 됩니다.</b></td></tr>
+          <tr><td class="key"><kbd>@</kbd></td><td>파일 이름을 붙여 <b>대화에 그 파일을 넣기.</b> 경로를 설명하지 않아도 됩니다.</td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>M</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>M</kbd></span></td><td><b>얼마나 물어보고 진행할지</b> 고르는 메뉴. 큰 작업은 <b>계획 모드로 시작</b>하는 게 좋습니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>Code 탭 — 실행 방식을 바꾸는 키 <span class="lvtag t3">성인</span></h2>
+      <p>같은 작업도 <b>어떤 모드·모델·노력으로 돌리는지</b>에 따라 결과와 비용이 달라집니다. 이 키들은 그걸 <b>작업 중에</b> 바꿉니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>키</th><th>동작</th></tr></thead>
+        <tbody>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>M</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>M</kbd></span> <span class="dash">→</span> <kbd>1</kbd>–<kbd>9</kbd></td><td><b>권한 모드.</b> 확인받으며 갈지, 알아서 하게 할지, <b>계획만 세우게</b> 할지. 메뉴를 열고 번호를 누르면 <b>두 번에 끝납니다.</b> 큰 작업은 계획 → 승인 → 실행 순서가 공식 권장입니다.</td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>I</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>I</kbd></span></td><td><b>모델 바꾸기.</b> 탐색은 빠른 모델로, 어려운 판단은 성능 높은 모델로 — 작업 중간에 갈아탈 수 있습니다.</td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>E</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>E</kbd></span></td><td><b>노력 수준.</b> 같은 모델도 얼마나 깊게 생각할지 조절합니다. 기계적인 작업은 낮추고 설계 판단은 올리는 식으로 씁니다.</td></tr>
+          <tr><td class="key"><kbd>Ctrl</kbd><kbd>O</kbd></td><td><b>표시 상세도 순환.</b> 무엇을 하고 있는지 자세히 볼지, 결과만 볼지. 검토할 때는 자세히, 굴려둘 때는 간략히. <span class="os-mac">Mac에서도 <kbd>Ctrl</kbd>입니다.</span></td></tr>
+          <tr><td class="key"><span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>S</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>S</kbd></span></td><td>브라우저 창에서 <b>요소를 직접 집어</b> 지목하기. "저 버튼" 같은 설명 대신 클릭으로 가리킵니다.</td></tr>
+          <tr><td class="key"><kbd>Ctrl</kbd><kbd>`</kbd></td><td>앱 안에서 <b>터미널 열기.</b> 세션과 <b>같은 환경·같은 폴더</b>라서 <code>git status</code>가 Claude가 보는 것과 일치합니다. <span class="os-mac">Mac에서도 <kbd>Ctrl</kbd>입니다.</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note lv-2">
+      <span class="note-h">알아두면 좋은 요령</span>
+      <p><b>고친 내용에 줄 단위로 의견 달기</b> — <span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>D</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>D</kbd></span>로 열고 아무 줄이나 클릭하면 메모창이 뜹니다. 여러 줄에 남긴 뒤 <span class="os-mac"><kbd>⌘</kbd><kbd>Enter</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Enter</kbd></span>로 <b>한꺼번에 보내면</b> 읽고 고쳐줍니다. 말로 설명하는 것보다 훨씬 정확합니다.</p>
+      <p><b>터미널에서 Claude Code를 쓰셨다면</b> — 터미널 단축키는 데스크톱 앱에서 <b>동작하지 않습니다.</b> 특히 터미널의 <kbd>Shift</kbd><kbd>Tab</kbd>은 안 되고, 여기서는 <span class="os-mac"><kbd>⌘</kbd><kbd>⇧</kbd><kbd>M</kbd></span><span class="os-win"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>M</kbd></span>입니다.</p>
+    </div>
+</section>
+
+  <!-- ================= PANEL 6 :: 교육 ================= -->
+  <section class="panel" role="tabpanel" id="p6" aria-labelledby="t6" tabindex="0" hidden>
+
+
+
+
+
+
+    <div class="sh lv-1">
+      <h2>먼저 이 영상 하나 <span class="tag t-ok">27분</span></h2>
+      <p>글로 읽기 전에 <b>한 번 보는 게 빠릅니다.</b> 한국어 초보자 가이드 중 <b>조회수가 가장 많은 영상</b>(52만회)입니다. 아래 화면을 누르면 <b>여기서 바로 재생됩니다.</b></p>
+    </div>
+    <div class="vidbox lv-1">
+      <button type="button" class="vidframe" id="vid-play" aria-label="영상 바로 재생 — 클로드 초보자 가이드 2026 (27분)">
+        <img class="vidthumb" alt="" src="data:image/jpeg;base64,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vJs7+5iQfwpK6j8gaxsUYNAF691bVtSO7Ubmac/9NXZv5ms7Han4NGDQAzFGKfg0YoA+iPhp+0Vrfwz8LJ4WsNNguY0lkl8yR2VsyHOMCvQP+Gy/E/8A0BrT/v49fG+DRigD034r/FC/+K+t22t6jax2j21v5AWNiwI3l88/WuC0/W9a0lGj0u7ntlc5YRSMgJ98Gs/FJigDof8AhMPFvbVLz/v8/wDjSf8ACYeLv+gpef8Af5/8a5/FGKAOg/4THxd/0FLz/v8AP/jR/wAJj4u/6Cl5/wB/n/xrnsUYoA6H/hMfF3/QUvP+/wA/+NH/AAmHi7/oKXn/AH+f/GuexRigDov+Ew8W99UvP+/z/wCNKPGHi3/oKXn/AH+f/GudxS4oA6IeMfFv/QUvP+/z/wCNKPGHi3/oKXf/AH+f/GudxS4oAklllnlaedi7uSzMxyST1JNMop1ABSikpaAFooooA//T+NaKKKAENJTqTFACYppFOooAZikxT8UYNAEeKMVJikoAZijBp9LigCPFLin4owaAGAUuKdijFADcUYp2KMUANxRinYoxQAzFGKfijFADMUuKdijFADcUYp2KMUANxRinYoxQA3FGKdijFADcUYp2KMUANxRinYoxQA3FLilxS4oAbilxS0UAJijFLRQAmKMUtFADaTFPoxQAzFGKdijFADcUYp2KMUANxRinYoxQA3FGKdijFADcUYp2KMUANxRinYoxQA3FJin4oxQAzFLgU7FGKAG4oxTsUuKAGYpcU7FFACYoxS0UAJijBpaKAExRilooATFJinUUANxRinUUAJijFLRQAmKMUtFACYpcUUUAGKTFLRQAmKMUtFACYoxS0UAJijFLRQAmKTFOooAbijFOooAbikxT6KAG4pMU/FGKAGYoxT8UmKAG4oxTsUYoAbijFOxRigBuKMU7FGKAG4oxTsUuKAG0uKWigAooxTsUAIBiloooAKKKKAP/1PjYikp1IaAEooooAKTFLRQAhFJTqKAG0U6jFADaKdijFADaKdRQA2inUUANpcUtFACYpKdRQA2inUUANop1FACYoxS0UAJijFLRQAmKMUtFACYoxS0UAJijFLRQAmKMGlooATFGKWigAxRRRQAYpMUtFACYowaWigBMUYpaKAG0U6igBMUYpaKAExRilooATFGKWigBMUYpaKAG0U6igBtL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">
+        <span class="vidshade"></span>
+        <span class="vidplay" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M5 3l16 9-16 9V3z"/></svg>
+        </span>
+        <span class="vidlen">27:08</span>
+      </button>
+      <span class="vid-meta">
+        <span class="vid-t">클로드 초보자 가이드 2026 | 이 영상 하나로 끝내세요.</span>
+        <a class="vid-a" href="https://www.youtube.com/watch?v=O6Lw_4Hh0mQ" target="_blank" rel="noopener">유튜브에서 열기 ↗</a>
+        <span class="vid-n"><b>그린코끼리 AI · 한국어 · 27분 · 조회 52만회</b> · 가입부터 실제로 뭘 시킬 수 있는지까지 처음 켜는 사람 기준으로 훑어줍니다. <b>처음 10분만 봐도</b> 기본은 잡힙니다.</span>
+      </span>
+    </div>
+    <p class="cap lv-1">영상은 앱이 바뀌면 화면이 달라집니다. <b>메뉴 위치가 다르면 아래 공식 문서가 최신</b>이니 그쪽을 따르세요.</p>
+
+
+    <div class="sh lv-1">
+      <h2>더 보고 싶으면 — 공식 영상</h2>
+      <p>위 영상으로 감을 잡았다면 이쪽으로. <b>전부 4~7분</b>짜리 Anthropic 공식 영상입니다. 순서대로 보면 <b>30분 남짓.</b> 영어지만 자막이 있고, <b>공식이라 화면이 최신입니다.</b></p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>영상</th><th>길이</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/getting-started-with-claude-ai">Getting started with Claude.ai</a></td>
+            <td data-l="길이">5분</td>
+            <td class="sep" data-l="내용">가장 먼저. <b>화면이 어떻게 생겼고 무엇부터 누르는지</b>를 보여줍니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/what-happens-when-you-talk-to-ai">What happens when you talk to AI?</a></td>
+            <td data-l="길이">5분</td>
+            <td class="sep" data-l="내용">안에서 무슨 일이 벌어지는지. <b>왜 틀린 답이 나오는지</b>가 이해됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/can-you-trust-what-ai-tells-you">Can you trust what AI tells you?</a></td>
+            <td data-l="길이">5분</td>
+            <td class="sep" data-l="내용"><b>어디까지 믿을지.</b> "신뢰는 스위치가 아니라 다이얼"이라는 관점으로 설명합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/intro-to-projects">Intro to Projects</a></td>
+            <td data-l="길이">7분</td>
+            <td class="sep" data-l="내용"><b>프로젝트</b>가 무엇이고 왜 쓰는지. 이걸 알면 매번 배경을 설명하지 않아도 됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/getting-started-with-connectors">Getting started with connectors</a></td>
+            <td data-l="길이">4분</td>
+            <td class="sep" data-l="내용">Gmail · 드라이브 같은 <b>내 서비스를 연결</b>하는 방법.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/getting-good-at-claude-a-research-backed-curriculum">Getting good at Claude</a></td>
+            <td data-l="길이">6분</td>
+            <td class="sep" data-l="내용">연구 기반으로 정리한 <b>학습 순서.</b> 다 보고 나서 뭘 더 할지 정할 때.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>한국어 공식 문서 <span class="tag t-ok">여기부터</span></h2>
+      <p>공식 헬프센터에 <b>한국어판이 있습니다.</b> 약 350편이고 <b>기능이 바뀔 때 같이 갱신됩니다</b> — 영어 자료를 뒤지기 전에 여기부터 보세요.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>문서</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://support.claude.com/ko/collections/4078531-claude">Claude 기본</a></td>
+            <td>Claude 시작하기, 기능 사용법, 계정 관리. <b>가장 먼저 볼 곳입니다.</b><br>
+            <span style="display:inline-block;margin-top:5px;color:var(--ink-3)">찾아볼 만한 제목 — <b>"프로젝트란 무엇인가요?"</b>, <b>"아티팩트란 무엇이며 어떻게 사용하나요?"</b>, <b>"Claude에 파일 업로드하기"</b>, <b>"사용량 및 길이 제한은 어떻게 작동하나요?"</b></span></td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://support.claude.com/ko/collections/16163169-claude-desktop">Claude Desktop</a></td>
+            <td>설치와 설정. <b>Mac에서 빠른 입력 사용하기</b> 문서가 여기 있습니다 — <b>단축키</b> 탭의 퀵 엔트리가 그것입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://support.claude.com/ko/collections/14445694-claude-code">Claude Code</a></td>
+            <td>개발자용. 코드 작업을 할 사람만 보면 됩니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap lv-1">전체 한국어 문서는 <a class="lnk" href="https://support.claude.com/ko/">support.claude.com/ko</a>에 약 350편이 있습니다. 모바일 앱, 커넥터, 요금제 문서도 한국어입니다.</p>
+
+    <div class="sh lv-1">
+      <h2>무료 강좌 — 여기서 시작</h2>
+      <p>Anthropic이 직접 운영합니다. 등록만 하면 <b>무료</b>이고 <b>수료증</b>이 나와 사내 교육 이수 관리에 쓸 수 있습니다. 강좌는 영어입니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>강좌</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://anthropic.skilljar.com/claude-101">Claude 101</a> <span class="tag t-ok">추천</span></td>
+            <td>일상 업무에서 쓰는 법. <b>Claude 만나기 → 프로젝트 · 아티팩트 · 스킬 → 도구 연결 → 역할별 활용</b>. <b>사내 공통 교육은 이 하나로 충분합니다.</b></td>
+          </tr>
+          <tr>
+            <td class="lab">AI Fluency: Framework &amp; Foundations</td>
+            <td>도구 사용법이 아니라 <b>AI와 협업하는 판단</b>을 다룹니다. 툴이 바뀌어도 남는 지식입니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap lv-1">전체 목록은 <a class="lnk" href="https://anthropic.skilljar.com/">anthropic.skilljar.com</a>, 학습 경로 안내는 <a class="lnk" href="https://anthropic.com/learn">anthropic.com/learn</a>.</p>
+
+    <div class="sh lv-2">
+      <h2>다음 단계 강좌 <span class="lvtag">청소년</span></h2>
+      <p>Chat이 익숙해졌다면 이쪽입니다. 역시 <b>무료 · 수료증</b>.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>강좌</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">Introduction to Claude Cowork</td><td>실제 파일과 프로젝트를 놓고 <b>일을 맡기는 방식</b>. 반복 업무를 넘기기 시작할 때.</td></tr>
+          <tr><td class="lab">Claude Code 101</td><td>Code 탭으로 <b>만들기 시작</b>할 때. 코드를 몰라도 들을 수 있습니다.</td></tr>
+          <tr><td class="lab">Introduction to agent skills</td><td>재사용 가능한 <b>스킬 만들기</b>. <b>스킬</b> 탭의 심화판입니다.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/teach-claude-your-way-of-working-using-skills">Teach Claude your way of working using skills</a></td><td><b>영상 10분.</b> 스킬을 왜 만드는지부터 실제로 만들어보기까지 짧게 훑습니다.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/choosing-the-right-claude-model">Choosing the right Claude model</a></td><td><b>영상 5분.</b> Haiku · Sonnet · Opus · Fable을 <b>언제 골라 쓰는지</b>. 모델을 바꿔 쓰기 시작할 때.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap lv-2">강좌는 <a class="lnk" href="https://anthropic.skilljar.com/">anthropic.skilljar.com</a>에서 이름으로 찾으시면 됩니다.</p>
+
+
+    <div class="sh lv-2">
+      <h2>따라 하는 튜토리얼 <span class="lvtag">청소년</span></h2>
+      <p>바로 따라 할 수 있는 공식 가이드입니다. <b>제목을 누르면 해당 문서로 이동합니다.</b> 새 가이드가 계속 추가되니 <a class="lnk" href="https://academy.claude.com/tutorials">academy.claude.com/tutorials</a>를 즐겨찾기 해두세요.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>자료</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/delegating-your-first-task-in-claude-cowork">Delegating your first task in Claude Cowork</a></td><td>Cowork에 <b>첫 작업을 맡겨보는</b> 가이드. Cowork를 처음 켠 사람이 볼 첫 문서.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/using-claude-cowork-for-sales-account-research">Using Claude Cowork for sales</a></td><td><span class="lvl">영업</span> 첫 통화 전에 거래처를 조사해두는 워크플로.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/using-claude-cowork-for-legal-question-briefing">Using Claude Cowork for legal</a></td><td><span class="lvl">법무</span> 과거 결정 사항에 대한 빠른 질의응답 만들기.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/using-claude-cowork-for-marketing-ops-review">Using Claude Cowork for marketing ops</a></td><td><span class="lvl">마케팅</span> 스스로 준비되는 주간 리뷰 만들기.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://academy.claude.com/tutorials/can-you-trust-what-ai-tells-you">Can you trust what AI tells you?</a></td><td><span class="lvl">판단력</span> <b>어디까지 믿어야 하나.</b> 틀린 걸 자신 있게 말하는 <b>환각</b>과, 내 말에 맞춰주는 <b>아첨</b> 두 가지를 다룹니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-1">
+      <h2>한국어 유료 강의</h2>
+      <p>공식 강좌가 영어라 부담스러우면. <b>유료</b>이고 Anthropic과 무관한 서드파티입니다.</p>
+    </div>
+    <div class="tw lv-1">
+      <table class="duo">
+        <thead><tr><th>자료</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="lab"><a class="lnk" href="https://www.inflearn.com/pages/claudecode2026">인프런</a></td><td>클로드 코드 강의를 <b>무료 · 유료 모아둔 큐레이션 페이지</b>. 레벨별로 나뉘어 있고 비개발자용도 있어, 비교해보기에 가장 편합니다.</td></tr>
+          <tr><td class="lab"><a class="lnk" href="https://fastcampus.co.kr/biz_online_claudecode">패스트캠퍼스</a></td><td>프로젝트 기반. 비개발자가 결과물을 만들어보는 구성.</td></tr>
+                  </tbody>
+      </table>
+    </div>
+    <div class="note warn lv-1">
+      <span class="note-h">유튜브를 볼 때</span>
+      <p>업데이트가 매우 빨라서 <b>몇 달 전 영상은 메뉴 위치와 기능 이름이 이미 다릅니다.</b> 이 문서 기준 데스크톱 앱은 <code>1.30096.5</code>입니다.</p>
+      <p><b>개념은 영상으로, 정확한 사양은 위의 한국어 문서로.</b> 영상대로 안 된다고 당황하지 마세요. 영상을 고르실 때는 <b>업로드 날짜를 먼저 보세요.</b></p>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>커뮤니티에서 나오는 것 <span class="lvtag t3">성인</span></h2>
+      <p>공식 자료에는 없는 <b>실전 패턴과 남이 만든 것</b>이 여기 모입니다. 다만 <b>서드파티이고 품질이 고르지 않습니다</b> — 아래 주의사항을 먼저 보세요.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>모음</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://github.com/travisvn/awesome-claude-skills">awesome-claude-skills</a></td>
+            <td>스킬 중심 큐레이션. <b>공식 스킬과 커뮤니티 스킬</b>을 함께 모으고, 제작 가이드와 <b>스킬 · MCP · 서브에이전트를 언제 쓸지 비교</b>한 문서까지 있습니다. 이 분야에서 가장 활발한 모음입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://github.com/subinium/awesome-claude-code">awesome-claude-code</a></td>
+            <td>한국인이 관리하는 모음. 도구 · 스킬 · 플러그인 · MCP 서버를 <b>스타 1,000개 이상</b>만 올리는 기준으로 걸러 담습니다. 에이전트 오케스트레이션과 모니터링 도구까지 다룹니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.reddit.com/r/ClaudeAI/">r/ClaudeAI</a></td>
+            <td>실사용 후기와 <b>남들이 어디서 막혔는지.</b> 새 기능의 실제 동작이 공식 문서보다 빠르게 올라오지만, <b>확인되지 않은 정보가 섞입니다.</b></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note warn lv-3">
+      <span class="note-h">남이 만든 걸 설치하기 전에</span>
+      <p><b>스킬과 플러그인은 지시문입니다.</b> 설치하면 그 안의 지시를 Claude가 따르게 됩니다 — 코드를 받아 실행하는 것과 같은 무게로 봐야 합니다. Claude Code가 설치 전 <b>신뢰 경고</b>를 띄우는 이유입니다.</p>
+      <p><b>내용을 읽고 판단하세요.</b> 스킬은 텍스트 파일이라 읽을 수 있습니다. 사내에 배포할 것이라면 <b>확장 허용 목록</b>으로 조직 차원에서 통제하는 편이 낫습니다.</p>
+      <p>이런 큐레이션 모음은 <b>여러 개가 경쟁하며 생기고 사라집니다.</b> 링크를 열었을 때 <b>마지막 갱신 시점</b>을 먼저 보세요 — 관리가 멈춘 목록은 오래된 정보만 남습니다.</p>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>사양을 확인하는 곳 <span class="lvtag t3">성인</span></h2>
+      <p>"되는 줄 알았는데 안 된다"를 끝내는 곳입니다. <b>버전별 동작 차이까지</b> 적혀 있어서, 남이 쓸 것을 만들 때는 여기가 최종 근거입니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>근원지</th><th>언제 보나</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://code.claude.com/docs">공식 문서</a></td>
+            <td>설정 키, 정책 항목, 스킬 프론트매터, 트리거 규격의 <b>최종 근거.</b> "이 버전부터 동작이 바뀜" 같은 <b>단서까지</b> 적혀 있습니다 — 사내 배포 전에 여기서 확인하세요.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://code.claude.com/docs/en/changelog">변경 이력</a></td>
+            <td>주간 다이제스트가 <b>고른 것</b>만 다루는 반면, 여기는 <b>버그 수정과 미세 변경까지</b> 전부 있습니다. 갑자기 동작이 달라졌을 때 원인을 찾는 곳입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering">엔지니어링 블로그</a></td>
+            <td>설계 근거가 나오는 근원지. 아래 대표 글 외에도 <b>계속 추가됩니다.</b></td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://github.com/anthropics">github.com/anthropics</a></td>
+            <td>예제와 스킬이 올라오는 <b>공식 저장소 모음.</b> 문서보다 <b>실제로 도는 코드</b>가 빠를 때가 있습니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>만든 사람들이 쓴 글 <span class="lvtag t3">성인</span></h2>
+      <p>강좌보다 밀도가 높습니다. <b>왜 그렇게 설계했는지</b>가 들어 있어서, 같은 문제를 만났을 때 판단 근거가 됩니다. 영어입니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>글</th><th>왜 볼 만한가</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://code.claude.com/docs/en/best-practices">Claude Code: Best practices for agentic coding</a></td>
+            <td>에이전트에게 코드를 맡길 때의 정석. <b>탐색 → 계획 → 구현</b> 순서를 왜 지켜야 하는지가 여기 있습니다. 지금은 공식 문서로 편입됐습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a></td>
+            <td><b>컨텍스트가 늘면 성능이 떨어진다</b>는 전제에서 출발합니다. 필요할 때 가져오는 방식, 압축, 노트 남기기, 여러 에이전트로 쪼개기 — <b>긴 작업을 설계할 때 직접 쓰는 전략</b>입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a></td>
+            <td>복잡한 프레임워크보다 <b>단순한 패턴</b>이 잘 동작한다는 관점. 자동화를 어디까지 복잡하게 만들지 판단할 때 기준이 됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Equipping agents for the real world with Agent Skills</a></td>
+            <td>스킬을 <b>왜 그런 구조로</b> 만들었는지. 스킬을 여러 개 운영하기 시작하면 읽어둘 만합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing effective tools for agents — with agents</a></td>
+            <td>사내 시스템을 붙일 때 <b>도구를 어떻게 설계해야</b> 에이전트가 잘 쓰는지. MCP 연동을 직접 만들 사람에게.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a></td>
+            <td>오래 도는 작업을 <b>안 깨지게</b> 굴리는 구조. 예약 작업과 자동화를 늘릴 때.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></td>
+            <td><b>잘 되고 있는지 어떻게 재는가.</b> "초록불인데 결과가 없다"를 근본적으로 다루는 이야기입니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>직접 만들 때 <span class="lvtag t3">성인</span></h2>
+      <p>연동을 만들거나 API로 붙일 단계라면 이쪽입니다. 전부 <b>무료</b>이고 공식 자료입니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>자료</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">Claude Code in Action</td><td><b>사람이 붙어 있지 않아도 되는 세션</b>을 신뢰할 수 있게 굴리는 방법. 자동화를 늘릴 때 바로 쓰입니다.</td></tr>
+          <tr><td class="lab">Introduction to agent skills</td><td>재사용 가능한 스킬 만들기. <b>스킬</b> 탭의 심화판입니다.</td></tr>
+          <tr><td class="lab">Introduction to subagents</td><td>작업을 <b>여러 에이전트로 쪼개</b> 굴리는 방법.</td></tr>
+          <tr><td class="lab">Introduction to Model Context Protocol</td><td><b>사내 시스템을 붙일 때</b> 필요한 연동을 직접 만듭니다(Python). <b>Advanced Topics</b> 과정이 따로 있습니다.</td></tr>
+          <tr><td class="lab">Building with the Claude API</td><td>우리 서비스에 Claude를 넣을 때. <b>Claude Platform 101</b>이 그 앞 단계입니다.</td></tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://github.com/anthropics/claude-cookbooks">anthropics/claude-cookbooks</a></td>
+            <td>바로 돌려볼 수 있는 <b>예제 노트북 모음.</b> <code>skills</code> 폴더에 스킬 제작 예제가 따로 있습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://github.com/anthropics/skills">anthropics/skills</a></td>
+            <td>공식 <b>스킬 예제 저장소.</b> 동작하는 스킬을 읽어보는 게 문서보다 빠릅니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="cap lv-3">강좌는 <a class="lnk" href="https://anthropic.skilljar.com/">anthropic.skilljar.com</a>에서 이름으로 찾으시면 됩니다.</p>
+
+    <div class="sh lv-2">
+      <h2>새 기능을 따라가는 곳 <span class="lvtag">청소년</span></h2>
+      <p>업데이트가 매우 빠릅니다. <b>한 번 배우고 끝이 아니라</b> 계속 나오는 걸 따라가야 뒤처지지 않습니다. 아래는 <b>새 내용이 계속 나오는 근원지</b>입니다.</p>
+    </div>
+    <div class="tw lv-2">
+      <table class="duo">
+        <thead><tr><th>근원지</th><th>무엇이 나오나 · 얼마나 자주</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://code.claude.com/docs/en/whats-new">주간 다이제스트</a></td>
+            <td><b>매주</b> 그 주에 나온 것 중 <b>일하는 방식이 바뀔 만한 것</b>만 골라 정리합니다. 단순 목록이 아니라 <b>왜 중요한지</b>와 예시가 붙습니다.<br>
+            <span style="display:inline-block;margin-top:6px;color:var(--ink-3)">여기 하나만 구독하듯 훑어도 충분합니다. 영어입니다.</span></td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://support.claude.com/en/articles/12138966-release-notes">릴리스 노트</a></td>
+            <td>앱 · Cowork · Code · 연동 전체의 <b>기능 출시 기록</b>입니다. "이 기능이 언제 생겼나"를 확인할 때. 주간 다이제스트보다 <b>범위가 넓고</b> 개발 얘기가 적습니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.anthropic.com/news">Anthropic 뉴스</a></td>
+            <td>새 모델과 큰 기능의 <b>공식 발표.</b> 자주 나오지 않으니 <b>월 1회</b> 훑는 정도면 됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab"><a class="lnk" href="https://www.reddit.com/r/ClaudeAI/">r/ClaudeAI</a></td>
+            <td>사용자 커뮤니티. <b>실사용 후기와 문제 사례가 공식 문서보다 빠릅니다.</b> 대신 확인되지 않은 정보도 섞여 있어 <b>공식 문서로 교차 확인</b>이 필요합니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-2">
+      <h2>사내에 퍼뜨릴 때 <span class="lvtag">청소년</span></h2>
+      <p>자료만 뿌리면 아무도 안 씁니다.</p>
+    </div>
+    <ol class="steps lv-2">
+      <li><b>한국어 문서 링크와 이 페이지를 함께 보내세요.</b> 영어 강좌부터 보내면 이수율이 낮습니다.</li>
+      <li><b>Mac · Windows 차이를 먼저 공지하세요.</b> 퀵 엔트리는 Mac만 있고 Cowork는 Windows에서 조건이 있습니다. 모르면 서로 화면을 설명하다 대화가 어긋납니다.</li>
+      <li><b>사내 자료를 어디까지 올려도 되는지 먼저 정하세요.</b> 개인이 즉석에서 판단할 문제가 아닙니다. <b>Cowork에 어느 폴더까지 열어주는지</b>도 같이 정해두면 좋습니다.</li>
+      <li><b>직무별로 나눠 주세요.</b> 전체에 다 뿌리면 안 봅니다. 위 표에서 해당 자료만.</li>
+      <li><b>팀마다 실제 업무 하나를 골라 같이 해보세요.</b> 강좌보다 <b>우리 일로 한 번 성공하는 경험</b>이 훨씬 강합니다.</li>
+      <li><b>잘 된 요청은 공유하세요.</b> 팀에서 통한 프롬프트는 <b>스킬</b> 탭 방식으로 저장해두면 모두가 재사용할 수 있습니다.</li>
+    </ol>
+  </section>
+
+  <footer class="foot">
+    확인 기준 — Claude 데스크톱 <span class="fm">v1.30096.5</span> 앱에서 추출한 메뉴 정의와 한국어 라벨,
+    그리고 Anthropic 공식 헬프센터 문서. 확인되지 않은 내용은 넣지 않았습니다.
+    앱은 자주 업데이트되니 화면이 다르면 <a class="lnk" href="https://support.claude.com/ko/">한국어 공식 문서</a>가 최신입니다.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function select(i, focus){
+    tabs.forEach(function(t, j){
+      var on = i === j;
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tabs[i].focus();
+    if (history.replaceState) history.replaceState(null, '', '#' + tabs[i].id);
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ select(i, false); });
+    t.addEventListener('keydown', function(e){
+      var n = null;
+      if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+      else if (e.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+      else if (e.key === 'Home') n = 0;
+      else if (e.key === 'End') n = tabs.length - 1;
+      if (n !== null){ e.preventDefault(); select(n, true); }
+    });
+  });
+  // ---- OS switch ----
+  var osBtns = { mac: document.getElementById('os-mac'), win: document.getElementById('os-win') };
+  function applyOS(os){
+    document.body.setAttribute('data-os', os);
+    osBtns.mac.setAttribute('aria-pressed', os === 'mac' ? 'true' : 'false');
+    osBtns.win.setAttribute('aria-pressed', os === 'win' ? 'true' : 'false');
+    try { localStorage.setItem('claude-guide-os', os); } catch (e) {}
+  }
+  function detectOS(){
+    try {
+      var saved = localStorage.getItem('claude-guide-os');
+      if (saved === 'mac' || saved === 'win') return saved;
+    } catch (e) {}
+    var ua = (navigator.userAgent || '') + ' ' + (navigator.platform || '');
+    if (/Win/i.test(ua)) return 'win';
+    if (/Mac|iPhone|iPad/i.test(ua)) return 'mac';
+    return 'mac';
+  }
+  Object.keys(osBtns).forEach(function(os){
+    osBtns[os].addEventListener('click', function(){ applyOS(os); });
+  });
+  applyOS(detectOS());
+
+  // ---- 레벨 스위치 ----
+  var lvBtns = { '1': document.getElementById('lv-1'),
+                 '2': document.getElementById('lv-2'),
+                 '3': document.getElementById('lv-3') };
+  function applyLv(lv){
+    document.body.setAttribute('data-lv', lv);
+    Object.keys(lvBtns).forEach(function(k){
+      lvBtns[k].setAttribute('aria-pressed', k === lv ? 'true' : 'false');
+    });
+    try { localStorage.setItem('claude-guide-lv', lv); } catch (e) {}
+
+    // 보이는 탭만 01부터 다시 번호 매김 (숨은 탭 때문에 번호가 끊기지 않게)
+    var shown = tabs.filter(function(t){ return t.offsetParent !== null; });
+    shown.forEach(function(t, i){
+      var n = t.querySelector('.n');
+      if (n) n.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
+    });
+    // 지금 고른 탭이 숨었으면 첫 번째 보이는 탭으로 옮김
+    var cur = tabs.filter(function(t){ return t.getAttribute('aria-selected') === 'true'; })[0];
+    if (shown.length && (!cur || cur.offsetParent === null)) {
+      select(tabs.indexOf(shown[0]), false);
+    }
+  }
+  Object.keys(lvBtns).forEach(function(k){
+    lvBtns[k].addEventListener('click', function(){ applyLv(k); });
+  });
+  var savedLv = '1';
+  try {
+    var v = localStorage.getItem('claude-guide-lv');
+    if (v === '1' || v === '2' || v === '3') savedLv = v;
+  } catch (e) {}
+  applyLv(savedLv);
+
+  var h = location.hash.replace('#','');
+  var idx = tabs.map(function(t){ return t.id; }).indexOf(h);
+  // 지금 수준에서 숨은 탭이면 무시 (빈 화면 방지)
+  if (idx > -1 && tabs[idx].offsetParent !== null) select(idx, false);
+})();
+</script>
+<script>
+(function(){
+  var btn = document.getElementById('vid-play');
+  if (!btn) return;
+  btn.addEventListener('click', function(){
+    var frame = document.createElement('span');
+    frame.className = 'vidframe';
+    var ifr = document.createElement('iframe');
+    ifr.src = 'https://www.youtube-nocookie.com/embed/O6Lw_4Hh0mQ?autoplay=1&rel=0';
+    ifr.title = '클로드 초보자 가이드 2026';
+    ifr.setAttribute('allow', 'autoplay; fullscreen; encrypted-media; picture-in-picture');
+    ifr.setAttribute('allowfullscreen', '');
+    frame.appendChild(ifr);
+    btn.replaceWith(frame);
+  });
+})();
+</script>
+</body>
+</html>
