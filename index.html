@@ -1822,57 +1822,45 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
       </table>
     </div>
 
-    <div class="sh lv-3">
-      <h2>직접 만들고 붙일 때 <span class="lvtag t3">성인</span></h2>
-      <p>연동을 만들거나 API로 붙일 단계라면 이쪽입니다. 전부 <b>무료</b> 공식 자료이고, 제목을 누르면 바로 갑니다.</p>
-    </div>
-    <div class="tw lv-3">
-      <table class="duo">
-        <thead><tr><th>자료</th><th>내용</th></tr></thead>
-        <tbody>
-          <tr><td class="lab"><a class="lnk" href="https://anthropic.skilljar.com/claude-code-in-action">Claude Code in Action</a></td><td><b>사람이 붙어 있지 않아도 되는 세션</b>을 신뢰할 수 있게 굴리는 방법. 팀 자동화를 늘릴 때 바로 쓰입니다.</td></tr>
-          <tr><td class="lab"><a class="lnk" href="https://anthropic.skilljar.com/introduction-to-subagents">Introduction to subagents</a></td><td>작업을 <b>여러 에이전트로 쪼개</b> 굴리는 방법.</td></tr>
-          <tr><td class="lab"><a class="lnk" href="https://anthropic.skilljar.com/introduction-to-model-context-protocol">Introduction to Model Context Protocol</a></td><td><b>사내 시스템을 붙일 때</b> 필요한 연동을 직접 만듭니다(Python). <b>Advanced Topics</b> 과정이 따로 있습니다.</td></tr>
-          <tr><td class="lab"><a class="lnk" href="https://anthropic.skilljar.com/claude-with-the-anthropic-api">Building with the Claude API</a></td><td>우리 서비스에 Claude를 넣을 때. <a class="lnk" href="https://anthropic.skilljar.com/claude-platform-101">Claude Platform 101</a>이 그 앞 단계입니다.</td></tr>
-          <tr>
-            <td class="lab"><a class="lnk" href="https://github.com/anthropics/claude-cookbooks">anthropics/claude-cookbooks</a></td>
-            <td>바로 돌려볼 수 있는 <b>예제 노트북 모음.</b> <code>skills</code> 폴더에 스킬 제작 예제가 따로 있습니다.</td>
-          </tr>
-          <tr>
-            <td class="lab"><a class="lnk" href="https://github.com/anthropics/skills">anthropics/skills</a></td>
-            <td>공식 <b>스킬 예제 저장소.</b> 동작하는 스킬을 읽어보는 게 문서보다 빠릅니다.</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="note lv-3">
+      <span class="note-h">성인의 교육은 수강이 아니라 조달입니다</span>
+      <p>순서대로 듣는 단계는 지났습니다. <b>지금 설계하는 것에서 출발해</b> 필요한 자료를 가져오세요 — <b>강좌</b>는 손을, <b>글</b>은 판단을, <b>문서</b>는 근거를 줍니다.</p>
     </div>
 
     <div class="sh lv-3">
-      <h2>만든 사람들이 쓴 글 <span class="lvtag t3">성인</span></h2>
-      <p>강좌보다 밀도가 높습니다. <b>왜 그렇게 설계했는지</b>가 들어 있어서, 같은 문제를 만났을 때 판단 근거가 됩니다. 영어입니다.</p>
+      <h2>하려는 일에서 출발하기 <span class="lvtag t3">성인</span></h2>
+      <p>전부 무료 공식 자료입니다(영어). 제목을 누르면 바로 갑니다.</p>
     </div>
     <div class="tw lv-3">
       <table class="duo">
-        <thead><tr><th>글</th><th>왜 볼 만한가</th></tr></thead>
+        <thead><tr><th>하려는 일</th><th>볼 것</th></tr></thead>
         <tbody>
           <tr>
-            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a></td>
-            <td><b>컨텍스트가 늘면 성능이 떨어진다</b>는 전제에서 출발합니다. 필요할 때 가져오는 방식, 압축, 노트 남기기, 여러 에이전트로 쪼개기 — <b>긴 작업을 설계할 때 직접 쓰는 전략</b>입니다.</td>
+            <td class="lab">팀 자동화를<br>안 깨지게 굴리기</td>
+            <td><a class="lnk" href="https://anthropic.skilljar.com/claude-code-in-action">Claude Code in Action</a> <span class="lvl">강좌</span> — 사람이 붙어 있지 않아도 되는 세션을 신뢰할 수 있게.<br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a> <span class="lvl">글</span> — 오래 도는 작업이 안 깨지는 구조.</span><br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a> <span class="lvl">글</span> — 잘 되는지 재는 법. "초록불인데 결과가 없다"의 근본 대책.</span></td>
           </tr>
           <tr>
-            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a></td>
-            <td>복잡한 프레임워크보다 <b>단순한 패턴</b>이 잘 동작한다는 관점. 팀 자동화를 어디까지 복잡하게 만들지 판단할 때 기준이 됩니다.</td>
+            <td class="lab">사내 시스템 붙이기<br><span class="lvl">MCP</span></td>
+            <td><a class="lnk" href="https://anthropic.skilljar.com/introduction-to-model-context-protocol">Introduction to Model Context Protocol</a> <span class="lvl">강좌</span> — 연동을 직접 만듭니다(Python). <b>Advanced Topics</b> 과정이 따로 있습니다.<br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing effective tools for agents</a> <span class="lvl">글</span> — 에이전트가 잘 쓰는 도구를 설계하는 법.</span></td>
           </tr>
           <tr>
-            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing effective tools for agents — with agents</a></td>
-            <td>사내 시스템을 붙일 때 <b>도구를 어떻게 설계해야</b> 에이전트가 잘 쓰는지. MCP 연동을 직접 만들 사람에게.</td>
+            <td class="lab">멀티 에이전트 설계</td>
+            <td><a class="lnk" href="https://anthropic.skilljar.com/introduction-to-subagents">Introduction to subagents</a> <span class="lvl">강좌</span> — 작업을 여러 에이전트로 쪼개 굴리기.<br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://www.anthropic.com/engineering/building-effective-agents">Building effective agents</a> <span class="lvl">글</span> — 복잡한 프레임워크보다 단순한 패턴. 어디까지 복잡하게 갈지의 기준.</span><br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents</a> <span class="lvl">글</span> — 컨텍스트가 늘면 성능이 떨어진다는 전제에서 긴 작업을 설계하는 전략.</span></td>
           </tr>
           <tr>
-            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a></td>
-            <td>오래 도는 작업을 <b>안 깨지게</b> 굴리는 구조. 예약 작업과 자동화를 늘릴 때.</td>
+            <td class="lab">우리 서비스에 AI 심기<br><span class="lvl">API</span></td>
+            <td><a class="lnk" href="https://anthropic.skilljar.com/claude-with-the-anthropic-api">Building with the Claude API</a> <span class="lvl">강좌</span> — 우리 제품에 Claude를 넣을 때.<br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://anthropic.skilljar.com/claude-platform-101">Claude Platform 101</a> <span class="lvl">강좌</span> — 그 앞 단계.</span></td>
           </tr>
           <tr>
-            <td class="lab"><a class="lnk" href="https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents">Demystifying evals for AI agents</a></td>
-            <td><b>잘 되고 있는지 어떻게 재는가.</b> "초록불인데 결과가 없다"를 근본적으로 다루는 이야기입니다.</td>
+            <td class="lab">예제로 배우기</td>
+            <td><a class="lnk" href="https://github.com/anthropics/claude-cookbooks">anthropics/claude-cookbooks</a> <span class="lvl">저장소</span> — 바로 돌려볼 수 있는 예제 노트북. <code>skills</code> 폴더에 스킬 제작 예제.<br>
+            <span style="display:inline-block;margin-top:6px"><a class="lnk" href="https://github.com/anthropics/skills">anthropics/skills</a> <span class="lvl">저장소</span> — 동작하는 공식 스킬 예제. 문서보다 실제 코드가 빠를 때.</span></td>
           </tr>
         </tbody>
       </table>
