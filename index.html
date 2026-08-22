@@ -387,6 +387,30 @@ body::before{content:""; display:block; height:4px;
 #totop:hover{color:var(--accent-ink); border-color:var(--accent)}
 #totop:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
 
+/* 버전 히스토리 */
+.ver-btn{appearance:none; border:1px solid var(--rule); background:var(--surface); color:var(--ink-3);
+  font-family:var(--disp); font-weight:700; font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  padding:3px 10px; border-radius:99px; cursor:pointer; vertical-align:1px}
+.ver-btn:hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
+.ver-btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+#verdlg{border:1px solid var(--rule); background:var(--surface); color:var(--ink);
+  max-width:560px; width:calc(100% - 48px); padding:0; margin:auto}
+#verdlg::backdrop{background:rgba(0,0,0,.45)}
+.ver-head{display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:13px 18px; border-bottom:2px solid var(--ink)}
+.ver-t{font-weight:700; font-size:16px}
+.ver-x{appearance:none; border:1px solid var(--rule); background:var(--cap-bg); color:var(--ink-2);
+  font-family:var(--sans); font-size:12px; font-weight:700; padding:4px 11px; border-radius:3px; cursor:pointer}
+.ver-x:hover{color:var(--ink); border-color:var(--cap-rule)}
+.ver-body{padding:4px 18px 12px}
+.ver-body table{width:100%; border-collapse:collapse; font-size:13.5px}
+.ver-body td{padding:11px 8px; border-bottom:1px solid var(--rule-2); vertical-align:top; color:var(--ink-2)}
+.ver-body tr:last-child td{border-bottom:none}
+.ver-body td b{color:var(--ink); font-weight:500}
+.ver-v{font-family:var(--disp); font-weight:800; color:var(--accent-ink); white-space:nowrap; width:1%}
+.ver-d{font-family:var(--mono); font-size:11px; color:var(--ink-3); white-space:nowrap; width:1%; padding-right:12px}
+.ver-cap{margin:0; padding:10px 18px 14px; font-size:12px; color:var(--ink-3); border-top:1px solid var(--rule-2)}
+
 /* 카드 호버 */
 .card{border-top:2px solid var(--accent); transition:transform .14s, box-shadow .14s}
 .card:hover{transform:translateY(-2px); box-shadow:0 4px 18px rgba(0,0,0,.07)}
@@ -2243,10 +2267,28 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
     확인 기준 — Claude 데스크톱 <span class="fm">v1.30096.5</span> 앱에서 추출한 메뉴 정의와 한국어 라벨,
     그리고 Anthropic 공식 헬프센터 문서. 확인되지 않은 내용은 넣지 않았습니다.
     앱은 자주 업데이트되니 화면이 다르면 <a class="lnk" href="https://support.claude.com/ko/">한국어 공식 문서</a>가 최신입니다.
-    마지막 개편 <span class="fm">2026-08-22</span> · 이 페이지도 Code 탭으로 만들었습니다.
+    버전 <span class="fm">v4</span> <span class="fm">(2026-08-22)</span> <button class="ver-btn" id="ver-open" type="button">히스토리</button> · 이 페이지도 Code 탭으로 만들었습니다.
   </footer>
 
 </div>
+
+<dialog id="verdlg" aria-labelledby="ver-title">
+  <div class="ver-head">
+    <span class="ver-t" id="ver-title">버전 히스토리</span>
+    <button class="ver-x" id="ver-close" type="button">닫기</button>
+  </div>
+  <div class="ver-body">
+    <table>
+      <tbody>
+        <tr><td class="ver-v">v4</td><td class="ver-d">2026-08-22</td><td>성인 단계 재설계 — <b>에이전트 · 인프라 · 팀플레이</b> 탭 신설, 교육을 "하려는 일에서 출발"로 개편, 설계자의 용어 추가.</td></tr>
+        <tr><td class="ver-v">v3</td><td class="ver-d">2026-08-22</td><td>수준 기준 재정의 — 애기=<b>물어보기</b> · 청소년=<b>맡기기</b> · 성인=<b>직원처럼, 팀 차원</b>. 수준 간 중복 노출 제거.</td></tr>
+        <tr><td class="ver-v">v2</td><td class="ver-d">2026-08-22</td><td>수준별 콘텐츠 보강(복붙 요청문 · 막혔을 때 · 실패 모드)과 UX 개편(고정 탭바 · 이전/다음 이동 · 복사 버튼).</td></tr>
+        <tr><td class="ver-v">v1</td><td class="ver-d">2026-08-22</td><td>첫 공개 — 수준 · Mac/Windows 스위치, 교육 영상 인페이지 재생.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="ver-cap">항목별 세부 변경은 <a class="lnk" href="https://github.com/egoidsm-gun/claude-guide/commits/main">변경 기록 전체</a>에서 볼 수 있습니다.</p>
+</dialog>
 
 <button id="totop" type="button" aria-label="맨 위로">↑</button>
 
@@ -2449,6 +2491,15 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
       if (rm) window.scrollTo(0, 0);
       else window.scrollTo({top: 0, behavior: 'smooth'});
     });
+  }
+
+  // ---- 버전 히스토리 ----
+  var verDlg = document.getElementById('verdlg');
+  var verOpen = document.getElementById('ver-open');
+  if (verDlg && verOpen && verDlg.showModal) {
+    verOpen.addEventListener('click', function(){ verDlg.showModal(); });
+    document.getElementById('ver-close').addEventListener('click', function(){ verDlg.close(); });
+    verDlg.addEventListener('click', function(e){ if (e.target === verDlg) verDlg.close(); });
   }
 
   // 진입 해시가 초기 탭 전환에 지워졌으면 복원 (#video처럼 탭이 아닌 해시만)
