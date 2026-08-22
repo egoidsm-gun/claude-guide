@@ -449,7 +449,7 @@ body::before{content:""; display:block; height:4px;
     <button class="tab lv-3" role="tab" id="t7" aria-controls="p7" aria-selected="false" tabindex="-1">
       <span class="n">02</span>에이전트
     </button>
-    <button class="tab lv-12" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1">
+    <button class="tab" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1">
       <span class="n">03</span>용어
     </button>
     <button class="tab lv-2" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1">
@@ -730,6 +730,50 @@ body::before{content:""; display:block; height:4px;
           <tr>
             <td class="lab">폴더 허용 · 신뢰</td>
             <td>Claude가 <b>어느 폴더까지 다뤄도 되는지</b> 내가 승인하는 것. Cowork와 Code가 시작할 때 묻습니다. <b>홈 폴더째 주지 말고</b> 필요한 폴더만 주세요 — 한 번 허용하면 계속 유지됩니다.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>설계자의 말들 <span class="lvtag t3">성인</span></h2>
+      <p>시스템을 설계하고 IT · 업계와 이야기할 때 나오는 말들입니다. 본문에 나온 말은 그 자리에서 설명했고, <b>여기는 그 너머입니다.</b></p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>말</th><th>뜻과 쓰임</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="lab">오케스트레이션<br><span class="lvl">orchestration</span></td>
+            <td>여러 에이전트에게 <b>일을 나누고 취합하는 지휘.</b> 분업 구도에서 리드가 하는 일이 이것입니다. "오케스트레이터가 있나"라는 질문은 <b>누가 나누고 누가 취합하나</b>를 묻는 것입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">서브에이전트<br><span class="lvl">subagent</span></td>
+            <td>한 에이전트가 작업 일부를 <b>떼어 맡기는 하위 에이전트.</b> 결과만 돌려받기 때문에 본 작업의 컨텍스트가 가벼워집니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">워크플로 vs 에이전트</td>
+            <td><b>정해진 순서대로 도는 것</b>이 워크플로, <b>상황을 보며 스스로 경로를 정하는 것</b>이 에이전트. 매번 경로가 같은 반복 업무는 워크플로면 충분합니다 — 경로가 매번 달라질 때만 에이전트가 필요합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">휴먼 인 더 루프<br><span class="lvl">human-in-the-loop</span></td>
+            <td>자동 흐름 중간에 <b>사람 승인 지점을 남겨두는 설계.</b> 자동화 사다리의 ① · ②가 이것입니다. 뺄지 말지는 편의가 아니라 <b>결과의 위험도</b>로 정합니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">켄타우로스 · 사이보그</td>
+            <td>사람-AI 분업의 두 패턴. <b>켄타우로스</b>는 일을 잘라 사람 몫과 AI 몫으로 나누고, <b>사이보그</b>는 모든 단계에서 섞여 일합니다. 팀플레이의 페어가 켄타우로스입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">하네스<br><span class="lvl">harness</span></td>
+            <td>에이전트를 감싸 <b>안정적으로 돌게 하는 실행 구조</b> — 재시작 가능하게, 상태는 파일로, 검증 지점을 끼워서. <b>교육</b> 탭 글 제목의 그 말입니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">평가<br><span class="lvl">evals</span></td>
+            <td><b>"잘 되고 있는가"를 정기적으로 재는 체계.</b> 초록불이 아니라 결과물 기준으로 잽니다. 자동화가 늘수록 이게 관리의 본체가 됩니다.</td>
+          </tr>
+          <tr>
+            <td class="lab">프롬프트 인젝션<br><span class="lvl">prompt injection</span></td>
+            <td>외부에서 들어온 텍스트에 <b>숨은 지시를 심어 AI를 조종하려는 공격.</b> 외부 입력을 지시가 아니라 <b>데이터로 다뤄야</b> 하는 이유입니다 — API 트리거가 넘어온 텍스트를 "신뢰할 수 없는 데이터"로 표시하는 것도 이 방어입니다.</td>
           </tr>
         </tbody>
       </table>
