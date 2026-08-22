@@ -443,11 +443,11 @@ body::before{content:""; display:block; height:4px;
 
   <div class="tabbar">
   <div class="tabs" role="tablist" aria-label="주제">
-    <button class="tab lv-3" role="tab" id="t7" aria-controls="p7" aria-selected="false" tabindex="-1">
-      <span class="n">01</span>에이전트
-    </button>
     <button class="tab" role="tab" id="t2" aria-controls="p2" aria-selected="true">
-      <span class="n">02</span>잘 쓰기
+      <span class="n">01</span>잘 쓰기
+    </button>
+    <button class="tab lv-3" role="tab" id="t7" aria-controls="p7" aria-selected="false" tabindex="-1">
+      <span class="n">02</span>에이전트
     </button>
     <button class="tab lv-12" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1">
       <span class="n">03</span>용어
@@ -2307,10 +2307,10 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
       var n = t.querySelector('.n');
       if (n) n.textContent = (i + 1 < 10 ? '0' : '') + (i + 1);
     });
-    // 지금 고른 탭이 숨었으면 이 수준의 홈 탭으로 (성인=에이전트, 그 외=잘 쓰기)
+    // 지금 고른 탭이 숨었으면 홈 탭(잘 쓰기)으로
     var cur = tabs.filter(function(t){ return t.getAttribute('aria-selected') === 'true'; })[0];
     if (shown.length && (!cur || cur.offsetParent === null)) {
-      var def = document.getElementById(lv === '3' ? 't7' : 't2');
+      var def = document.getElementById('t2');
       select(tabs.indexOf(def && def.offsetParent !== null ? def : shown[0]), false);
     }
     buildNext();
@@ -2331,9 +2331,8 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
   if (idx > -1 && tabs[idx].offsetParent !== null) {
     select(idx, false);
   } else if (idx === -1) {
-    // 해시로 탭을 지정하지 않았으면 수준의 홈 탭에서 시작 (성인=에이전트, 그 외=잘 쓰기)
-    var lv0 = document.body.getAttribute('data-lv');
-    var home = document.getElementById(lv0 === '3' ? 't7' : 't2');
+    // 해시로 탭을 지정하지 않았으면 홈 탭(잘 쓰기)에서 시작
+    var home = document.getElementById('t2');
     if (home && home.offsetParent !== null && home.getAttribute('aria-selected') !== 'true') {
       select(tabs.indexOf(home), false);
     }
