@@ -2114,8 +2114,23 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
     </div>
 
     <div class="sh lv-3">
-      <h2>MCP — 사내 시스템은 이걸로 붙입니다 <span class="lvtag t3">성인</span></h2>
-      <p>기본 연동(Google Workspace · Microsoft 365 · GitHub)에 없는 <b>우리 시스템 — DB · ERP · 사내 도구 — 를 붙이는 공개 규격</b>입니다.</p>
+      <h2>무엇으로 붙이나 — 세 가지 연결 <span class="lvtag t3">성인</span></h2>
+      <p>연결 수단은 셋이고 <b>방향이 다릅니다.</b> 이 표 하나면 IT와의 대화가 통합니다.</p>
+    </div>
+    <div class="tw lv-3">
+      <table class="duo">
+        <thead><tr><th>수단</th><th>방향과 용도</th></tr></thead>
+        <tbody>
+          <tr><td class="lab">커넥터 — 켠다</td><td><b>Claude → 내가 쓰는 서비스.</b> 메일 · 드라이브 · 메신저처럼 <b>남이 이미 만들어 둔 연결선</b>입니다. 켜기만 하면 되는 인프라의 1층 — 이것부터 켜고 시작하세요.</td></tr>
+          <tr><td class="lab">MCP — 짓는다</td><td><b>Claude → 우리 시스템.</b> 커넥터 목록에 없는 우리 것(DB · ERP · 사내 도구)을 붙일 때 <b>직접 만드는 연결선</b>의 규격. 만들지 말지는 아래 표로.</td></tr>
+          <tr><td class="lab">API — 심는다</td><td>방향이 반대 — <b>우리 서비스가 Claude를 부릅니다.</b> 우리 제품 · 사내 도구에 AI 기능을 넣을 때. 개발 영역이고, 입구는 <b>교육</b> 탭의 API 강좌입니다.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sh lv-3">
+      <h2>MCP — 만들지 말지의 판단 <span class="lvtag t3">성인</span></h2>
+      <p>연동은 만드는 순간부터 관리 대상이 됩니다. <b>판단부터.</b></p>
     </div>
     <div class="tw lv-3">
       <table class="duo">
@@ -2124,6 +2139,7 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
           <tr><td class="lab">만들 가치가 있다</td><td>여러 사람이 <b>같은 데이터를 반복해서 꺼내 쓸 때</b> — 매출 조회, 재고 확인, 고객 이력처럼. 한 번 붙이면 <b>대화에서도, 예약 자동화에서도</b> 그 데이터를 씁니다.</td></tr>
           <tr><td class="lab">아직 아니다</td><td>한 사람이 가끔 보는 데이터. 그건 파일로 올리는 게 쌉니다. <b>연동은 만드는 것보다 유지가 일</b>입니다.</td></tr>
           <tr><td class="lab">먼저 정할 것 — 공통 키</td><td>상품 · 고객처럼 시스템마다 이름이 다른 대상을 잇는 <b>공통 식별자 하나</b>를 정하세요. 이게 있어야 에이전트가 "이 상품, 지난달 어땠어?"를 <b>시스템을 넘나들며</b> 답합니다. 연동 설계의 1순위입니다.</td></tr>
+          <tr><td class="lab">DB는 도구로 감싸서</td><td>DB를 <b>통째로 열지 않습니다.</b> "지난달 매출"처럼 <b>정해진 조회 도구</b>를 만들어 주는 게 정석 — 쓰기와 권한이 통제되고, AI가 DB 구조를 몰라도 정확히 답합니다.</td></tr>
           <tr><td class="lab">누가 만드나</td><td>개발 작업입니다 — IT · 개발팀에 요청하세요. 직접 만들 사람은 <b>교육</b> 탭의 MCP 강좌와 "도구 설계" 글부터.</td></tr>
         </tbody>
       </table>
