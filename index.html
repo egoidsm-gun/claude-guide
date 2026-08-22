@@ -1932,6 +1932,15 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
     frame.appendChild(ifr);
     btn.replaceWith(frame);
   });
+  // #video 로 진입하면 교육 탭을 열고 바로 재생
+  if (location.hash === '#video') {
+    var t6 = document.getElementById('t6');
+    if (t6) t6.click();
+    setTimeout(function(){
+      btn.scrollIntoView({block: 'center'});
+      btn.click();
+    }, 250);
+  }
 })();
 </script>
 </body>
