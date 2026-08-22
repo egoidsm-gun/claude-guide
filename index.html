@@ -365,14 +365,6 @@ body::before{content:""; display:block; height:4px;
 .prew .copybtn{position:absolute; top:26px; right:10px}
 .prew pre{margin-top:16px}
 
-/* 탭 안 섹션 점프 칩 */
-.ptoc{display:flex; flex-wrap:wrap; gap:7px; margin:0 0 22px}
-.ptoc:empty{display:none}
-.ptoc a{font-size:12px; font-weight:600; color:var(--ink-2); text-decoration:none; line-height:1.5;
-  border:1px solid var(--rule); background:var(--surface); padding:4px 11px; border-radius:99px}
-.ptoc a:hover{color:var(--accent-ink); border-color:var(--accent); background:var(--accent-soft)}
-.ptoc a:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
-
 /* 패널 하단 이전 · 다음 */
 .pnext{margin-top:46px; display:flex; justify-content:space-between; gap:10px}
 .pnext:empty{display:none}
@@ -2112,35 +2104,6 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
     }
     if (pos > 0) slot.appendChild(mk(shown[pos - 1], 'prev'));
     if (pos < shown.length - 1) slot.appendChild(mk(shown[pos + 1], 'next'));
-    buildToc(panel);
-  }
-  // ---- 긴 탭 머리에 섹션 점프 칩 (보이는 섹션이 5개 이상일 때만) ----
-  function buildToc(panel){
-    var toc = panel.querySelector('.ptoc');
-    var heads = Array.prototype.slice.call(panel.querySelectorAll('.sh h2')).filter(function(h){
-      return h.offsetParent !== null;
-    });
-    if (heads.length < 5) { if (toc) toc.innerHTML = ''; return; }
-    if (!toc) {
-      toc = document.createElement('nav');
-      toc.className = 'ptoc';
-      toc.setAttribute('aria-label', '이 탭의 섹션');
-      panel.insertBefore(toc, panel.firstChild);
-    }
-    toc.innerHTML = '';
-    heads.forEach(function(h){
-      var c = h.cloneNode(true);
-      Array.prototype.slice.call(c.querySelectorAll('span')).forEach(function(s){ s.parentNode.removeChild(s); });
-      var a = document.createElement('a');
-      a.href = '#';
-      a.textContent = c.textContent.trim();
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        h.parentNode.scrollIntoView({block: 'start', behavior: rm ? 'auto' : 'smooth'});
-      });
-      toc.appendChild(a);
-    });
   }
   // ---- OS switch ----
   var osBtns = { mac: document.getElementById('os-mac'), win: document.getElementById('os-win') };
