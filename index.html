@@ -2274,7 +2274,7 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
     확인 기준 — Claude 데스크톱 <span class="fm">v1.30096.5</span> 앱에서 추출한 메뉴 정의와 한국어 라벨,
     그리고 Anthropic 공식 헬프센터 문서. 확인되지 않은 내용은 넣지 않았습니다.
     앱은 자주 업데이트되니 화면이 다르면 <a class="lnk" href="https://support.claude.com/ko/">한국어 공식 문서</a>가 최신입니다.
-    버전 <span class="fm">v5</span> <span class="fm">(2026-08-22)</span> <button class="ver-btn" id="ver-open" type="button">히스토리</button> · 이 페이지도 Code 탭으로 만들었습니다.
+    버전 <span class="fm">v5</span> <span class="fm">(2026-08-22)</span> <button class="ver-btn" id="ver-open" type="button">히스토리</button> · 이 페이지도 Code 탭으로 만들었습니다. 방문·클릭 수는 쿠키 없이 익명 집계합니다.
   </footer>
 
 </div>
@@ -2547,6 +2547,35 @@ description: 우리 회사 보도자료를 쓸 때 쓰는 형식과 톤.
       btn.click();
     }, 250);
   }
+})();
+</script>
+
+<!-- 방문·클릭 익명 집계 (GoatCounter — 쿠키 없음, localhost 무시) -->
+<script data-goatcounter="https://egoidsm-guide.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+<script>
+(function(){
+  function track(name){
+    try {
+      if (window.goatcounter && goatcounter.count) goatcounter.count({path: name, title: name, event: true});
+    } catch (e) {}
+  }
+  // 복붙 템플릿: 어떤 요청문이 실제로 복사되는지
+  Array.prototype.slice.call(document.querySelectorAll('.copybtn[data-copy]')).forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var tpl = btn.closest ? btn.closest('.tpl') : null;
+      var t = tpl ? tpl.querySelector('.tpl-t') : null;
+      track('복사-' + (t ? t.textContent.trim() : btn.getAttribute('data-copy')));
+    });
+  });
+  // 수준 스위치: 어느 수준까지 눌러보는지
+  var lvNames = { 'lv-1': '애기', 'lv-2': '청소년', 'lv-3': '성인' };
+  Object.keys(lvNames).forEach(function(id){
+    var b = document.getElementById(id);
+    if (b) b.addEventListener('click', function(){ track('수준-' + lvNames[id]); });
+  });
+  // 교육 영상 재생 (#video 자동재생 포함)
+  var vp = document.getElementById('vid-play');
+  if (vp) vp.addEventListener('click', function(){ track('영상-재생'); });
 })();
 </script>
 </body>
