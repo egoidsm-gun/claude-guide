@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex,nofollow">
+<title>에고이즘 관제센터</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Ctext%20y%3D%27.9em%27%20font-size%3D%2790%27%3E%F0%9F%93%A1%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --ground:#FFFFFF; --surface:#F9FAFB; --surface-2:#F2F4F6;
+  --ink:#191F28; --ink-2:#4E5968; --ink-3:#6B7684;
+  --rule:#E5E8EB; --rule-2:#F2F4F6;
+  --accent:#3182F6; --accent-ink:#1B64DA; --accent-soft:#E8F3FF;
+  --bad:#E5484D; --bad-soft:#FDECEC;
+  --sh-1:0 1px 4px rgba(2,32,71,.09);
+  --sans:"Pretendard Variable",Pretendard,-apple-system,system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#17171C; --surface:#1E1F26; --surface-2:#26272F;
+    --ink:#ECEEF1; --ink-2:#A8B0BA; --ink-3:#8A93A0;
+    --rule:#33343E; --rule-2:#26272F;
+    --accent:#4E97FE; --accent-ink:#77B0FF; --accent-soft:#1D2B44;
+    --bad:#F2555A; --bad-soft:#3A2023;
+    --sh-1:0 1px 4px rgba(0,0,0,.4);
+  }
+}
+*{box-sizing:border-box}
+body{margin:0; background:var(--ground); color:var(--ink);
+  font-family:var(--sans); font-size:15px; line-height:1.6;
+  letter-spacing:-.005em; -webkit-font-smoothing:antialiased}
+.wrap{max-width:880px; margin:0 auto; padding:0 20px 80px}
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:36px 0 0; flex-wrap:wrap}
+h1{font-size:24px; font-weight:800; letter-spacing:-.03em; margin:0}
+h1 .dot{color:var(--accent)}
+.seg{display:inline-flex; background:var(--surface-2); border-radius:12px; padding:3px}
+.seg button{appearance:none; border:none; background:transparent; border-radius:9px;
+  font-family:inherit; font-size:13.5px; font-weight:600; color:var(--ink-2);
+  padding:7px 14px; cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ground); color:var(--ink); font-weight:800; box-shadow:var(--sh-1)}
+.site{background:var(--surface); border-radius:20px; padding:22px; margin-top:20px}
+.site-h{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+.site-name{font-size:17px; font-weight:800}
+.site-link{font-size:12.5px; color:var(--ink-3); text-decoration:none; overflow-wrap:anywhere}
+.site-link:hover{color:var(--accent-ink); text-decoration:underline}
+.gc-link{margin-left:auto; font-size:12px; font-weight:600; color:var(--ink-3); text-decoration:none; white-space:nowrap}
+.gc-link:hover{color:var(--accent-ink)}
+.tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:16px}
+@media (max-width:640px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{background:var(--ground); border-radius:14px; padding:13px 15px}
+.tile .k{font-size:12px; font-weight:600; color:var(--ink-3)}
+.tile .v{font-size:24px; font-weight:800; letter-spacing:-.02em; margin-top:2px; font-variant-numeric:tabular-nums}
+.tile .v small{font-size:12px; font-weight:600; color:var(--ink-3); letter-spacing:0}
+.chart-box{margin-top:16px}
+.chart-t{font-size:13px; font-weight:700; color:var(--ink-2)}
+.bars{display:flex; align-items:flex-end; gap:2px; height:96px; margin-top:10px}
+.bar{flex:1; display:flex; flex-direction:column; justify-content:flex-end; height:100%; cursor:default}
+.bar i{display:block; background:var(--accent); border-radius:4px 4px 0 0; min-height:2px; transition:opacity .1s}
+.bar.zero i{background:var(--rule); min-height:2px}
+.bar:hover i{opacity:.75}
+.bax{display:flex; gap:2px; margin-top:6px}
+.bax span{flex:1; text-align:center; font-size:10px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.cols{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px}
+@media (max-width:640px){.cols{grid-template-columns:1fr}}
+.list{background:var(--ground); border-radius:14px; padding:14px 15px}
+.list .lt{font-size:13px; font-weight:700; color:var(--ink-2); margin-bottom:10px}
+.row{margin-bottom:10px}
+.row:last-child{margin-bottom:0}
+.row .rl{display:flex; justify-content:space-between; gap:10px; font-size:13px}
+.row .rl b{font-weight:600; color:var(--ink); overflow-wrap:anywhere}
+.row .rl span{color:var(--ink-2); font-weight:700; font-variant-numeric:tabular-nums}
+.row .tr{height:5px; background:var(--surface-2); border-radius:99px; margin-top:5px; overflow:hidden}
+.row .tr i{display:block; height:100%; background:var(--accent); border-radius:99px}
+.mini{margin-top:14px; font-size:12.5px; color:var(--ink-3)}
+.mini b{color:var(--ink-2); font-weight:600}
+.empty{color:var(--ink-3); font-size:13px}
+.note{margin-top:20px; font-size:12.5px; color:var(--ink-3)}
+.note a{color:var(--accent-ink); text-decoration:none}
+.note a:hover{text-decoration:underline}
+/* 토큰 게이트 */
+.gate{max-width:460px; margin:80px auto 0; background:var(--surface); border-radius:20px; padding:26px}
+.gate h2{font-size:18px; font-weight:800; margin:0}
+.gate p{font-size:13.5px; color:var(--ink-2); margin:10px 0 0}
+.gate ol{font-size:13px; color:var(--ink-2); margin:12px 0 0; padding-left:18px}
+.gate ol li{margin-bottom:6px}
+.gate input{width:100%; margin-top:14px; padding:11px 13px; border:1.5px solid var(--rule); border-radius:12px;
+  background:var(--ground); color:var(--ink); font-family:inherit; font-size:13.5px}
+.gate input:focus{outline:none; border-color:var(--accent)}
+.gate button{width:100%; margin-top:10px; padding:12px; border:none; border-radius:12px;
+  background:var(--accent); color:#fff; font-family:inherit; font-size:14.5px; font-weight:700; cursor:pointer}
+.gate button:hover{background:var(--accent-ink)}
+.gate .err{margin-top:10px; font-size:13px; color:var(--bad); background:var(--bad-soft); border-radius:10px; padding:9px 12px; display:none}
+.gate a{color:var(--accent-ink); text-decoration:none}
+/* 툴팁 */
+#tip{position:fixed; z-index:50; pointer-events:none; background:var(--ink); color:var(--ground);
+  font-size:12px; font-weight:600; padding:5px 9px; border-radius:8px; opacity:0; transform:translate(-50%,-130%);
+  white-space:nowrap; font-variant-numeric:tabular-nums}
+.loading{opacity:.45}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top" id="top" hidden>
+    <h1>에고이즘 관제센터<span class="dot">.</span></h1>
+    <div class="seg" role="group" aria-label="기간">
+      <button data-days="1">오늘</button>
+      <button data-days="7" aria-pressed="true">7일</button>
+      <button data-days="30">30일</button>
+    </div>
+  </div>
+  <div id="sites"></div>
+  <p class="note" id="foot" hidden>수집: GoatCounter (쿠키 없는 익명 집계) · 토큰은 이 브라우저에만 저장됩니다 ·
+    <a href="#" id="logout">토큰 지우기</a></p>
+
+  <div class="gate" id="gate" hidden>
+    <h2>관제센터 열기</h2>
+    <p>GoatCounter <b>API 토큰</b>을 한 번만 넣으면 이 브라우저에 저장됩니다. 토큰은 서버로 가지 않고 GoatCounter API 호출에만 쓰입니다.</p>
+    <ol>
+      <li><a href="https://egoidsm-guide.goatcounter.com/user/api" target="_blank" rel="noopener">GoatCounter → 설정 → API</a> 열기</li>
+      <li><b>Create new token</b> — 권한은 <b>Read statistics</b>만 체크</li>
+      <li>생성된 토큰을 아래에 붙여넣기</li>
+    </ol>
+    <input id="tok" type="password" placeholder="토큰 붙여넣기" autocomplete="off">
+    <button id="save">저장하고 열기</button>
+    <div class="err" id="gerr"></div>
+  </div>
+</div>
+<div id="tip"></div>
+
+<script>
+// ===== 설정: 사이트가 늘면 여기에 한 줄씩 추가 =====
+var SITES = [
+  { name: '클로드 뽕 뽑기', code: 'egoidsm-guide', url: 'https://egoidsm-gun.github.io/claude-guide/' }
+];
+// 이벤트 경로 앞머리 → 묶음 이름
+var EVENT_GROUPS = [
+  { prefix: '복사-', title: '템플릿 복사' },
+  { prefix: '수준-', title: '수준 클릭' },
+  { prefix: '영상-', title: '영상' }
+];
+
+var TKEY = 'egoidsm-dash-token';
+var state = { days: 7 };
+
+function $(s, el){ return (el || document).querySelector(s); }
+function esc(s){ var d = document.createElement('i'); d.textContent = s; return d.innerHTML; }
+function fmt(n){ return (n || 0).toLocaleString('ko-KR'); }
+function ymd(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+function api(code, path, params){
+  var qs = params ? '?' + new URLSearchParams(params) : '';
+  return fetch('https://' + code + '.goatcounter.com/api/v0' + path + qs, {
+    headers: { Authorization: 'Bearer ' + localStorage.getItem(TKEY) }
+  }).then(function(r){
+    if (r.status === 401 || r.status === 403) throw { auth: true };
+    if (!r.ok) throw new Error('API ' + r.status);
+    return r.json();
+  });
+}
+
+// ===== 토큰 게이트 =====
+function showGate(msg){
+  $('#gate').hidden = false; $('#top').hidden = true; $('#foot').hidden = true;
+  $('#sites').innerHTML = '';
+  if (msg) { var e = $('#gerr'); e.textContent = msg; e.style.display = 'block'; }
+}
+$('#save').addEventListener('click', function(){
+  var t = $('#tok').value.trim();
+  if (!t) return;
+  localStorage.setItem(TKEY, t);
+  api(SITES[0].code, '/me').then(function(){ location.reload(); })
+    .catch(function(){ localStorage.removeItem(TKEY);
+      var e = $('#gerr'); e.textContent = '토큰이 맞지 않습니다. 권한(Read statistics)과 함께 다시 확인해주세요.'; e.style.display = 'block'; });
+});
+$('#tok').addEventListener('keydown', function(ev){ if (ev.key === 'Enter') $('#save').click(); });
+$('#logout').addEventListener('click', function(ev){ ev.preventDefault(); localStorage.removeItem(TKEY); location.reload(); });
+
+// ===== 데이터 로드 =====
+function range(){
+  var end = new Date(), start = new Date();
+  start.setDate(end.getDate() - (state.days - 1));
+  return { start: ymd(start), end: ymd(end) };
+}
+
+async function loadSite(site, box){
+  var r = range();
+  box.classList.add('loading');
+  try {
+    var total = await api(site.code, '/stats/total', { start: r.start, end: r.end });
+    await sleep(300);
+    var hits = await api(site.code, '/stats/hits', { start: r.start, end: r.end, daily: 'true', limit: '100' });
+    await sleep(300);
+    var sys = null;
+    try { sys = await api(site.code, '/stats/systems', { start: r.start, end: r.end, limit: '4' }); } catch (e) { if (e && e.auth) throw e; }
+    render(site, box, total, hits && hits.hits || [], sys);
+  } catch (e) {
+    if (e && e.auth) { showGate('토큰이 만료됐거나 권한이 없습니다. 다시 넣어주세요.'); return; }
+    box.innerHTML = siteHead(site) + '<p class="empty" style="margin-top:14px">불러오지 못했습니다 — 네트워크 또는 GoatCounter 상태를 확인해주세요. (' + esc(String(e.message || e)) + ')</p>';
+  }
+  box.classList.remove('loading');
+}
+
+function siteHead(site){
+  return '<div class="site-h"><span class="site-name">' + esc(site.name) + '</span>' +
+    '<a class="site-link" href="' + site.url + '" target="_blank" rel="noopener">' + esc(site.url.replace('https://','')) + '</a>' +
+    '<a class="gc-link" href="https://' + site.code + '.goatcounter.com" target="_blank" rel="noopener">원본 대시보드 ↗</a></div>';
+}
+
+function render(site, box, total, hits, sys){
+  var pages = hits.filter(function(h){ return !h.event; });
+  var events = hits.filter(function(h){ return h.event; });
+
+  // 일별 방문 (페이지 경로들의 stats 합산)
+  var byDay = {};
+  pages.forEach(function(h){ (h.stats || []).forEach(function(s){ byDay[s.day] = (byDay[s.day] || 0) + (s.daily || 0); }); });
+  var days = [];
+  for (var d = new Date(range().start), end = new Date(range().end); d <= end; d.setDate(d.getDate()+1)) {
+    var k = ymd(d); days.push({ day: k, n: byDay[k] || 0 });
+  }
+  var max = Math.max.apply(null, days.map(function(x){ return x.n; }).concat([1]));
+
+  // 이벤트 묶음
+  function group(prefix){
+    return events.filter(function(h){ return (h.path || '').indexOf(prefix) === 0; })
+      .map(function(h){ return { name: h.path.slice(prefix.length), n: h.count || 0 }; })
+      .sort(function(a,b){ return b.n - a.n; });
+  }
+  var copies = group('복사-'), levels = group('수준-'), video = group('영상-');
+  var sum = function(a){ return a.reduce(function(t,x){ return t + x.n; }, 0); };
+
+  var tiles =
+    tile('방문(페이지뷰)', fmt(total.total)) +
+    tile('템플릿 복사', fmt(sum(copies))) +
+    tile('수준 클릭', fmt(sum(levels))) +
+    tile('영상 재생', fmt(sum(video)));
+
+  var barHtml = days.map(function(x){
+    var h = Math.round(x.n / max * 100);
+    return '<span class="bar' + (x.n ? '' : ' zero') + '" data-tip="' + x.day.slice(5).replace('-','/') + ' · ' + fmt(x.n) + '"><i style="height:' + Math.max(h, 2) + '%"></i></span>';
+  }).join('');
+  var axis = '';
+  if (days.length > 1) {
+    axis = '<div class="bax">' + days.map(function(x, i){
+      var lab = (i === 0 || i === days.length - 1) ? x.day.slice(5).replace('-','/') : '';
+      return '<span>' + lab + '</span>';
+    }).join('') + '</div>';
+  }
+
+  var listHtml =
+    '<div class="cols">' +
+      list('템플릿 복사 톱', copies) +
+      list('수준 클릭', levels) +
+    '</div>';
+
+  var sysLine = '';
+  if (sys && sys.stats && sys.stats.length) {
+    sysLine = '<p class="mini">방문 환경 — ' + sys.stats.map(function(s){
+      return '<b>' + esc(s.name || '?') + '</b> ' + fmt(s.count);
+    }).join(' · ') + '</p>';
+  }
+
+  box.innerHTML = siteHead(site) +
+    '<div class="tiles">' + tiles + '</div>' +
+    '<div class="chart-box"><div class="chart-t">일별 방문</div><div class="bars">' + barHtml + '</div>' + axis + '</div>' +
+    listHtml + sysLine;
+}
+
+function tile(k, v){ return '<div class="tile"><div class="k">' + k + '</div><div class="v">' + v + '</div></div>'; }
+function list(title, items){
+  var max = Math.max.apply(null, items.map(function(x){ return x.n; }).concat([1]));
+  var rows = items.length ? items.map(function(x){
+    return '<div class="row"><div class="rl"><b>' + esc(x.name) + '</b><span>' + fmt(x.n) + '</span></div>' +
+      '<div class="tr"><i style="width:' + Math.round(x.n / max * 100) + '%"></i></div></div>';
+  }).join('') : '<p class="empty">아직 데이터가 없습니다</p>';
+  return '<div class="list"><div class="lt">' + title + '</div>' + rows + '</div>';
+}
+
+// ===== 툴팁 =====
+document.addEventListener('mousemove', function(ev){
+  var b = ev.target.closest ? ev.target.closest('.bar') : null;
+  var tip = $('#tip');
+  if (b && b.dataset.tip) {
+    tip.textContent = b.dataset.tip;
+    tip.style.left = ev.clientX + 'px'; tip.style.top = ev.clientY - 6 + 'px';
+    tip.style.opacity = '1';
+  } else tip.style.opacity = '0';
+});
+
+// ===== 기간 스위치 =====
+document.querySelectorAll('.seg button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
+    b.setAttribute('aria-pressed', 'true');
+    state.days = parseInt(b.dataset.days, 10);
+    boot();
+  });
+});
+
+// ===== 시작 =====
+async function boot(){
+  if (!localStorage.getItem(TKEY)) { showGate(); return; }
+  $('#gate').hidden = true; $('#top').hidden = false; $('#foot').hidden = false;
+  var host = $('#sites'); host.innerHTML = '';
+  for (var i = 0; i < SITES.length; i++) {
+    var box = document.createElement('div'); box.className = 'site'; box.innerHTML = siteHead(SITES[i]) + '<p class="empty" style="margin-top:14px">불러오는 중…</p>';
+    host.appendChild(box);
+    await loadSite(SITES[i], box);
+    if (i < SITES.length - 1) await sleep(400);
+  }
+}
+boot();
+</script>
+</body>
+</html>
