@@ -136,21 +136,26 @@ h1 .dot{color:var(--accent)}
 var SITES = [
   { name: '클로드 뽕 뽑기', code: 'egoidsm-guide', url: 'https://egoidsm-gun.github.io/claude-guide/' }
 ];
-// 이벤트 경로 앞머리 → 묶음 이름
-var EVENT_GROUPS = [
-  { prefix: '복사-', title: '템플릿 복사' },
-  { prefix: '수준-', title: '수준 클릭' },
-  { prefix: '영상-', title: '영상' }
-];
 
 var TKEY = 'egoidsm-dash-token';
-var state = { days: 7 };
+var state = { days: 7, cache: {} };
 
 function $(s, el){ return (el || document).querySelector(s); }
 function esc(s){ var d = document.createElement('i'); d.textContent = s; return d.innerHTML; }
 function fmt(n){ return (n || 0).toLocaleString('ko-KR'); }
 function ymd(d){ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
 function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+function daysBack(n){
+  var out = [];
+  for (var i = n - 1; i >= 0; i--) { var x = new Date(); x.setDate(x.getDate() - i); out.push(ymd(x)); }
+  return out;
+}
+// API의 start/end는 '시각'(시 단위 반올림) — end를 내일 0시로 줘야 오늘이 포함된다
+function fetchWindow(){
+  var s = new Date(); s.setDate(s.getDate() - 29);
+  var e = new Date(); e.setDate(e.getDate() + 1);
+  return { start: ymd(s), end: ymd(e) };
+}
 
 function api(code, path, params){
   var qs = params ? '?' + new URLSearchParams(params) : '';
@@ -180,24 +185,17 @@ $('#save').addEventListener('click', function(){
 $('#tok').addEventListener('keydown', function(ev){ if (ev.key === 'Enter') $('#save').click(); });
 $('#logout').addEventListener('click', function(ev){ ev.preventDefault(); localStorage.removeItem(TKEY); location.reload(); });
 
-// ===== 데이터 로드 =====
-function range(){
-  var end = new Date(), start = new Date();
-  start.setDate(end.getDate() - (state.days - 1));
-  return { start: ymd(start), end: ymd(end) };
-}
-
+// ===== 데이터: 사이트당 30일치 1회 로드, 기간은 로컬 슬라이스 =====
 async function loadSite(site, box){
-  var r = range();
+  var w = fetchWindow();
   box.classList.add('loading');
   try {
-    var total = await api(site.code, '/stats/total', { start: r.start, end: r.end });
-    await sleep(300);
-    var hits = await api(site.code, '/stats/hits', { start: r.start, end: r.end, daily: 'true', limit: '100' });
+    var hits = await api(site.code, '/stats/hits', { start: w.start, end: w.end, daily: 'true', limit: '100' });
     await sleep(300);
     var sys = null;
-    try { sys = await api(site.code, '/stats/systems', { start: r.start, end: r.end, limit: '4' }); } catch (e) { if (e && e.auth) throw e; }
-    render(site, box, total, hits && hits.hits || [], sys);
+    try { sys = await api(site.code, '/stats/systems', { start: w.start, end: w.end, limit: '4' }); } catch (e) { if (e && e.auth) throw e; }
+    state.cache[site.code] = { hits: (hits && hits.hits) || [], sys: sys };
+    renderSite(site, box);
   } catch (e) {
     if (e && e.auth) { showGate('토큰이 만료됐거나 권한이 없습니다. 다시 넣어주세요.'); return; }
     box.innerHTML = siteHead(site) + '<p class="empty" style="margin-top:14px">불러오지 못했습니다 — 네트워크 또는 GoatCounter 상태를 확인해주세요. (' + esc(String(e.message || e)) + ')</p>';
@@ -211,42 +209,58 @@ function siteHead(site){
     '<a class="gc-link" href="https://' + site.code + '.goatcounter.com" target="_blank" rel="noopener">원본 대시보드 ↗</a></div>';
 }
 
-function render(site, box, total, hits, sys){
+// 선택 기간의 날짜 집합으로 해당 경로의 합계
+function sliceCount(h, daySet){
+  var s = h.stats || [];
+  if (!s.length) return state.days === 30 ? (h.count || 0) : 0;
+  var t = 0;
+  s.forEach(function(x){ if (daySet[x.day]) t += (x.daily || 0); });
+  return t;
+}
+
+function renderSite(site, box){
+  var cached = state.cache[site.code];
+  if (!cached) return;
+  var hits = cached.hits, sys = cached.sys;
+  var days = daysBack(state.days);
+  var daySet = {}; days.forEach(function(d){ daySet[d] = true; });
+
   var pages = hits.filter(function(h){ return !h.event; });
   var events = hits.filter(function(h){ return h.event; });
 
-  // 일별 방문 (페이지 경로들의 stats 합산)
+  // 일별 방문
   var byDay = {};
-  pages.forEach(function(h){ (h.stats || []).forEach(function(s){ byDay[s.day] = (byDay[s.day] || 0) + (s.daily || 0); }); });
-  var days = [];
-  for (var d = new Date(range().start), end = new Date(range().end); d <= end; d.setDate(d.getDate()+1)) {
-    var k = ymd(d); days.push({ day: k, n: byDay[k] || 0 });
-  }
-  var max = Math.max.apply(null, days.map(function(x){ return x.n; }).concat([1]));
+  pages.forEach(function(h){ (h.stats || []).forEach(function(s){
+    if (daySet[s.day]) byDay[s.day] = (byDay[s.day] || 0) + (s.daily || 0);
+  }); });
+  var series = days.map(function(d){ return { day: d, n: byDay[d] || 0 }; });
+  var max = Math.max.apply(null, series.map(function(x){ return x.n; }).concat([1]));
+  var pv = series.reduce(function(t, x){ return t + x.n; }, 0);
 
   // 이벤트 묶음
   function group(prefix){
     return events.filter(function(h){ return (h.path || '').indexOf(prefix) === 0; })
-      .map(function(h){ return { name: h.path.slice(prefix.length), n: h.count || 0 }; })
-      .sort(function(a,b){ return b.n - a.n; });
+      .map(function(h){ return { name: h.path.slice(prefix.length), n: sliceCount(h, daySet) }; })
+      .filter(function(x){ return x.n > 0; })
+      .sort(function(a, b){ return b.n - a.n; });
   }
   var copies = group('복사-'), levels = group('수준-'), video = group('영상-');
-  var sum = function(a){ return a.reduce(function(t,x){ return t + x.n; }, 0); };
+  var sum = function(a){ return a.reduce(function(t, x){ return t + x.n; }, 0); };
 
   var tiles =
-    tile('방문(페이지뷰)', fmt(total.total)) +
+    tile('방문(페이지뷰)', fmt(pv)) +
     tile('템플릿 복사', fmt(sum(copies))) +
     tile('수준 클릭', fmt(sum(levels))) +
     tile('영상 재생', fmt(sum(video)));
 
-  var barHtml = days.map(function(x){
+  var barHtml = series.map(function(x){
     var h = Math.round(x.n / max * 100);
     return '<span class="bar' + (x.n ? '' : ' zero') + '" data-tip="' + x.day.slice(5).replace('-','/') + ' · ' + fmt(x.n) + '"><i style="height:' + Math.max(h, 2) + '%"></i></span>';
   }).join('');
   var axis = '';
-  if (days.length > 1) {
-    axis = '<div class="bax">' + days.map(function(x, i){
-      var lab = (i === 0 || i === days.length - 1) ? x.day.slice(5).replace('-','/') : '';
+  if (series.length > 1) {
+    axis = '<div class="bax">' + series.map(function(x, i){
+      var lab = (i === 0 || i === series.length - 1) ? x.day.slice(5).replace('-','/') : '';
       return '<span>' + lab + '</span>';
     }).join('') + '</div>';
   }
@@ -259,7 +273,7 @@ function render(site, box, total, hits, sys){
 
   var sysLine = '';
   if (sys && sys.stats && sys.stats.length) {
-    sysLine = '<p class="mini">방문 환경 — ' + sys.stats.map(function(s){
+    sysLine = '<p class="mini">방문 환경(최근 30일) — ' + sys.stats.map(function(s){
       return '<b>' + esc(s.name || '?') + '</b> ' + fmt(s.count);
     }).join(' · ') + '</p>';
   }
@@ -291,13 +305,16 @@ document.addEventListener('mousemove', function(ev){
   } else tip.style.opacity = '0';
 });
 
-// ===== 기간 스위치 =====
+// ===== 기간 스위치: 캐시에서 즉시 다시 그림 (재요청 없음) =====
 document.querySelectorAll('.seg button').forEach(function(b){
   b.addEventListener('click', function(){
     document.querySelectorAll('.seg button').forEach(function(x){ x.setAttribute('aria-pressed', 'false'); });
     b.setAttribute('aria-pressed', 'true');
     state.days = parseInt(b.dataset.days, 10);
-    boot();
+    SITES.forEach(function(site, i){
+      var box = document.querySelectorAll('#sites .site')[i];
+      if (box && state.cache[site.code]) renderSite(site, box);
+    });
   });
 });
 
@@ -307,7 +324,8 @@ async function boot(){
   $('#gate').hidden = true; $('#top').hidden = false; $('#foot').hidden = false;
   var host = $('#sites'); host.innerHTML = '';
   for (var i = 0; i < SITES.length; i++) {
-    var box = document.createElement('div'); box.className = 'site'; box.innerHTML = siteHead(SITES[i]) + '<p class="empty" style="margin-top:14px">불러오는 중…</p>';
+    var box = document.createElement('div'); box.className = 'site';
+    box.innerHTML = siteHead(SITES[i]) + '<p class="empty" style="margin-top:14px">불러오는 중…</p>';
     host.appendChild(box);
     await loadSite(SITES[i], box);
     if (i < SITES.length - 1) await sleep(400);
